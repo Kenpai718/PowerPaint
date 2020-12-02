@@ -13,8 +13,14 @@ import javax.swing.event.MouseInputAdapter;
 
 public class PaintPanel extends JPanel {
 	
+	//constants
+	
 	/** The default size of the drawing panel. */
     private static final Dimension PANEL_DEFAULT_SIZE = new Dimension(400, 200);
+    
+    //fields
+    
+    private Color myColor;
 	
 	public PaintPanel() {
         super();
@@ -33,8 +39,15 @@ public class PaintPanel extends JPanel {
                              RenderingHints.VALUE_ANTIALIAS_ON);
 		
 	}
+	
+	//to set color of drawing tool
+	public void setColor(Color theColor) {
+		myColor = theColor;
+	}
 
 	public void setupListeners() {
-		
+		//mouse listener
+		//draagging listener
+		//add a cursor
 	}
 }
