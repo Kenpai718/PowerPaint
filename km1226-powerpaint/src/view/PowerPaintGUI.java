@@ -92,7 +92,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	/** A list of tool actions from actions package. */
 	private List<Action> myToolActions;
 
-	/** Toolbar of tools attatched to jpanel */
+	/** Toolbar of tools attached to jpanel */
 	private JToolBar myToolBar;
 
 	// fields below for color options
@@ -212,11 +212,11 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myOptionsMenu.addSeparator();
 
 		// adds the clear function
-		myOptionsMenu.add(new JMenuItem("Clear"));
+		myOptionsMenu.add(new JMenuItem("Clear", KeyEvent.VK_C));
 		myOptionsMenu.addSeparator();
 
 		// extra option in case user wants to exit
-		JMenuItem exit = new JMenuItem("Exit");
+		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_E);
 		exit.addActionListener(new ExitAction());
 		myOptionsMenu.add(exit);
 
