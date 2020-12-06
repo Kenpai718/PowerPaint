@@ -23,6 +23,7 @@ import tools.AbstractPaintTool;
 import tools.LineTool;
 import tools.PaintShape;
 import tools.PaintTool;
+import tools.PencilTool;
 
 public class PaintPanel extends JPanel {
 
@@ -59,6 +60,12 @@ public class PaintPanel extends JPanel {
 
 	/** Current tool used on the panel */
 	private PaintTool myCurrentTool;
+	
+	/** Start position */
+	private Point myStartPoint;
+	
+	/** Next/End position */
+	private Point myNextPoint;
 
 	/**
 	 * Paint panel constructor
@@ -70,7 +77,7 @@ public class PaintPanel extends JPanel {
 
 		myPreviousShapes = new ArrayList<PaintShape>();
 		myColor = DEFAULT_COLOR;
-		myThickness = 1;
+		myThickness = DEFAULT_THICKNESS;
 
 		// set default tool
 		// NOTE: should be pencil as default, but for now its line tool
@@ -180,8 +187,12 @@ public class PaintPanel extends JPanel {
 		@Override
 		// set start point at mouse click
 		public void mousePressed(final MouseEvent theEvent) {
+			myStartPoint = theEvent.getPoint();
+			myNextPoint = myStartPoint;
 
-			myCurrentTool.setStartPoint(theEvent.getPoint());
+			//draws a dot when pressed and will extend when dragged
+			myCurrentTool.setStartPoint(myStartPoint);
+			myCurrentTool.setNextPoint(myNextPoint);
 			myCurrentShape = myCurrentTool.getShape();
 		}
 
@@ -189,7 +200,8 @@ public class PaintPanel extends JPanel {
 		// set the ending point
 		public void mouseDragged(final MouseEvent theEvent) {
 
-			myCurrentTool.setNextPoint(theEvent.getPoint());
+			myNextPoint = theEvent.getPoint();
+			myCurrentTool.setNextPoint(myNextPoint);
 			myCurrentShape = myCurrentTool.getShape();
 
 			// update panel with new line that follows the drag

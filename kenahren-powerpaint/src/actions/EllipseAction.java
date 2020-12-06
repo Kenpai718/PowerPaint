@@ -8,6 +8,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
+import tools.EllipseTool;
+import tools.PaintTool;
 import view.PaintPanel;
 
 public class EllipseAction extends AbstractAction {
@@ -20,6 +22,7 @@ public class EllipseAction extends AbstractAction {
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
+    private PaintTool myTool;
     
    /**
      * Construct an Action of the Ellipse tool.
@@ -29,16 +32,19 @@ public class EllipseAction extends AbstractAction {
     public EllipseAction(final PaintPanel thePanel) {
         super(NAME, ICON);
         
-        putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
-        putValue(Action.SELECTED_KEY, true);
-        putValue(Action.SHORT_DESCRIPTION, "A Eclipse");
         
         myPanel = thePanel;
+        myTool = new EllipseTool();
+        
+        putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
+        putValue(Action.SELECTED_KEY, true);
+        putValue(Action.SHORT_DESCRIPTION, "A Eclipse");
 
     }
     
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
+    	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
     }
     

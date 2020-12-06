@@ -4,24 +4,26 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
-public class LineTool extends AbstractPaintTool {
+public class RectangleTool extends AbstractPaintTool {
 
-	private static final String NAME = "Line";
+	private static final String MY_NAME = "Rectangle";
 
-	private static final int MNEMONIC = KeyEvent.VK_L;
+	private static final int MY_MNEMONIC = KeyEvent.VK_R;
 
 	private Point myNextPoint;
 
-	public LineTool() {
-		super(NAME, MNEMONIC);
+	public RectangleTool() {
+		super(MY_NAME, MY_MNEMONIC);
 		myNextPoint = NO_POINT;
 	}
 
 	@Override
 	public Shape getShape() {
-		return new Line2D.Double(getStartPoint().x, getStartPoint().y,
-				myNextPoint.x, myNextPoint.y);
+		final Rectangle2D.Double rect = new Rectangle2D.Double();
+		rect.setFrameFromDiagonal(getStartPoint(), myNextPoint);
+		return rect;
 	}
 
 	@Override

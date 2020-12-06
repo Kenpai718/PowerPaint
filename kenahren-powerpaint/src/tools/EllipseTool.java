@@ -3,25 +3,27 @@ package tools;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
-public class LineTool extends AbstractPaintTool {
+public class EllipseTool extends AbstractPaintTool {
 
-	private static final String NAME = "Line";
+	private static final String MY_NAME = "Ellipse";
 
-	private static final int MNEMONIC = KeyEvent.VK_L;
+	private static final int MY_MNEMONIC = KeyEvent.VK_O;
 
 	private Point myNextPoint;
 
-	public LineTool() {
-		super(NAME, MNEMONIC);
+	public EllipseTool() {
+		super(MY_NAME, MY_MNEMONIC);
 		myNextPoint = NO_POINT;
 	}
 
 	@Override
 	public Shape getShape() {
-		return new Line2D.Double(getStartPoint().x, getStartPoint().y,
-				myNextPoint.x, myNextPoint.y);
+		final Ellipse2D.Double el = new Ellipse2D.Double();
+		el.setFrameFromDiagonal(getStartPoint(), myNextPoint);
+		return el;
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class LineAction extends AbstractAction {
     
     /** The tool that represents the Line. */
     private final PaintTool myTool;
-    
+  
     
     
    /**
@@ -35,12 +35,13 @@ public class LineAction extends AbstractAction {
     public LineAction(final PaintPanel thePanel) {
         super(NAME, ICON);
         
-        putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
+        myPanel = thePanel;
+        myTool = new LineTool();
+        
+        putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
         putValue(Action.SELECTED_KEY, true);
         putValue(Action.SHORT_DESCRIPTION, "A Line");
         
-        myPanel = thePanel;
-        myTool = new LineTool();
 
     }
     

@@ -9,6 +9,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
+import tools.EraserTool;
+import tools.PaintTool;
 import view.PaintPanel;
 
 public class EraserAction extends AbstractAction {
@@ -21,6 +23,8 @@ public class EraserAction extends AbstractAction {
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
+    private PaintTool myTool;
+    
 	   /**
   * Construct an Action of the Line tool.
   * 
@@ -29,15 +33,20 @@ public class EraserAction extends AbstractAction {
  public EraserAction(final PaintPanel thePanel) {
      super(NAME, ICON);
      
-     putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+     myPanel = thePanel;
+     myTool = new EraserTool();
+     
+     putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
      putValue(Action.SELECTED_KEY, true);
      putValue(Action.SHORT_DESCRIPTION, "An eraser");
      
-     myPanel = thePanel;
+    
+     
  }
  
  @Override
  public void actionPerformed(final ActionEvent theEvent) {
+	 myPanel.setCurrentTool(myTool);
      myPanel.repaint();
  }
 
