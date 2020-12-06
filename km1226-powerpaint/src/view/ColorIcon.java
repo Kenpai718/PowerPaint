@@ -1,42 +1,63 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.Component;
+import java.awt.Graphics;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
-public class ColorIcon{
-
-	//default square sizes
-    public static final int WIDTH = 10;
-    public static final int HEIGHT = 10;
-
-
-
+public class ColorIcon implements Icon {
+	
+    /** The color of the icon. */
     private Color myColor;
-    private ImageIcon myColorIcon;
-
-    public ColorIcon(Color theColor) {
+    
+    /** The height of the icon. */
+    private static final int HEIGHT = 14;
+    
+    /** The width of the icon. */
+    private static final int WIDTH = 14;
+   
+    
+    /**
+     * Constructs a new icon with the given color.
+     * 
+     * @param theColor color of the icon.
+     */
+    public ColorIcon(final Color theColor) {
         myColor = theColor;
-        myColorIcon = createColorIcon(theColor);
     }
-
-    public ImageIcon createColorIcon(Color theColor) {
-        BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = image.createGraphics();
-        graphics.setPaint(theColor);
-        graphics.fillRect (0, 0, WIDTH, HEIGHT);
-        return new ImageIcon(image);
+    
+    @Override
+    public void paintIcon(final Component theComponent, 
+                          final Graphics theGraphics, final int theX, final int theY) {
+        
+    	//the fill color
+        theGraphics.setColor(myColor);
+        theGraphics.fillRect(theX, theY, WIDTH, HEIGHT);
+        
+        //the border
+        theGraphics.setColor(Color.BLACK);
+        theGraphics.drawRect(theX, theY, WIDTH, HEIGHT);
+        
     }
-
-    public void setColor(Color theColor) {
+    
+    /** 
+     * This sets the color of the icon.
+     * 
+     * @param theColor the color if the icon.
+     */
+    public void setColor(final Color theColor) {
         myColor = theColor;
-        myColorIcon = createColorIcon(theColor);
+    }
+    
+    @Override
+    public int getIconWidth() {
+        return WIDTH;
     }
 
-    public ImageIcon getIcon() {
-        return myColorIcon;
+    @Override
+    public int getIconHeight() {
+        return HEIGHT;
     }
 
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -55,10 +56,10 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	private static final int THICKNESS_INIT = 10;
 
 	/** Default color for primary color */
-	private final Color PURPLE = new Color(128, 0, 128);
+	private final Color PURPLE = new Color(51, 0, 111);
 
 	/** Default color for secondary color */
-	private final Color GOLD = new Color(255, 223, 0);;
+	private final Color GOLD = new Color(232, 211, 162);;
 
 	// fields
 
@@ -83,7 +84,6 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	/** The image icon to show in the window title and about window. */
 	private ImageIcon myImageIcon = new ImageIcon("./images/w.gif");
 	
-	/** A slider that when adjusted changes the thickness for drawing */
 	private JSlider myThicknessSlider;
 	
 	/** A list of color actions. */
@@ -92,7 +92,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	/** A list of tool actions from actions package. */
 	private List<Action> myToolActions;
 
-	/** Tool bar of tools attached to j-panel */
+	/** Toolbar of tools attatched to jpanel */
 	private JToolBar myToolBar;
 
 	// fields below for color options
@@ -124,6 +124,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		setupGUI();
 
 	}
+	
 
     /**
      * Helper method to initialize all GUI components
@@ -131,6 +132,8 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	public void setupGUI() {
 		// initialize jframe
 		myFrame = new JFrame("PowerPaint");
+		//add a custom icon to the frame
+		myFrame.setIconImage(myImageIcon.getImage());
 		myFrame.setVisible(true);
 		myFrame.setSize(500, 500);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,11 +147,13 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		// add buttons and menu options
 		setupToolActions();
 		setupTopMenu();
+		myFrame.add(myPanel);
 
 		// put toolbar on the panel
 		myFrame.add(myToolBar, BorderLayout.SOUTH);
 
 	}
+	
 
     /**
      * Setups actions for the tool buttons on the toolbar
@@ -207,30 +212,24 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myOptionsMenu.addSeparator();
 
 		// adds the clear function
-		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_C);
-		myOptionsMenu.add(clear);
+		myOptionsMenu.add(new JMenuItem("Clear"));
 		myOptionsMenu.addSeparator();
 
 		// extra option in case user wants to exit
-		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_E);
+		JMenuItem exit = new JMenuItem("Exit");
 		exit.addActionListener(new ExitAction());
 		myOptionsMenu.add(exit);
 
 	}
 	
-	/**
-     * Setups the slider under the thickness sub-menu in the menu options
-     * 
-     */
 	public void setupThicknessSlider()
-	{
-		myThicknessSlider = new JSlider(THICKNESS_MIN, THICKNESS_MAX, THICKNESS_INIT);
-		myThicknessSlider.setMajorTickSpacing(MAJOR_SPACING);
-		myThicknessSlider.setMinorTickSpacing(MINOR_SPACING);
-		myThicknessSlider.setPaintTicks(true);
-		myThicknessSlider.setPaintLabels(true);
-	}
-	
+    {
+        myThicknessSlider = new JSlider(THICKNESS_MIN, THICKNESS_MAX, THICKNESS_INIT);
+        myThicknessSlider.setMajorTickSpacing(MAJOR_SPACING);
+        myThicknessSlider.setMinorTickSpacing(MINOR_SPACING);
+        myThicknessSlider.setPaintTicks(true);
+        myThicknessSlider.setPaintLabels(true);
+    }
 	
     /**
      * Setups the color buttons under the menu options
@@ -238,12 +237,12 @@ public class PowerPaintGUI implements PropertyChangeListener {
      */
 	public void setupColorButtons() {
 		myPrimaryButton = new JMenuItem("Primary Color...",
-				myColorIcon.getIcon());
+				myColorIcon);
 		myPrimaryButton.setMnemonic(KeyEvent.VK_P);
 		myOptionsMenu.add(myPrimaryButton);
 
 		mySecondaryButton = new JMenuItem("Secondary Color...",
-				myColorIcon2.getIcon());
+				myColorIcon2);
 		mySecondaryButton.setMnemonic(KeyEvent.VK_S);
 		myOptionsMenu.add(mySecondaryButton);
 
@@ -266,10 +265,8 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 			// update primary colors based on input
 			myColorIcon.setColor(colorChoice);
-			ImageIcon update = myColorIcon.createColorIcon(colorChoice);
-			myPrimaryButton.setIcon(update);
 
-			// set the color for the j-panel tool
+			// set the color for the jpanel tool
 			if (colorChoice != null) {
 				myPanel.setColor(colorChoice);
 			}
@@ -290,11 +287,9 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 			// update secondary colors based on input
 			myColorIcon2.setColor(colorChoice);
-			ImageIcon update = myColorIcon.createColorIcon(colorChoice);
-			mySecondaryButton.setIcon(update);
 
 			if (colorChoice != null) {
-				myPanel.setColor(colorChoice);
+				myPanel.setSecondaryColor(colorChoice);
 			}
 		}
 

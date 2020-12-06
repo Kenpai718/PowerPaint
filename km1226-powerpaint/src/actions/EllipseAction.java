@@ -31,7 +31,7 @@ public class EllipseAction extends AbstractAction {
         
         putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
         putValue(Action.SELECTED_KEY, true);
-        putValue(Action.SHORT_DESCRIPTION, "An Ellipse");
+        putValue(Action.SHORT_DESCRIPTION, "A Eclipse");
         
         myPanel = thePanel;
 

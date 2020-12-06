@@ -31,7 +31,7 @@ public class EraserAction extends AbstractAction {
      
      putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
      putValue(Action.SELECTED_KEY, true);
-     putValue(Action.SHORT_DESCRIPTION, "An Eraser");
+     putValue(Action.SHORT_DESCRIPTION, "An eraser");
      
      myPanel = thePanel;
  }
