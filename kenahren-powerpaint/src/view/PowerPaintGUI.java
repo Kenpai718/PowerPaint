@@ -55,10 +55,10 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	private static final int THICKNESS_INIT = 1;
 
 	/** Default color for primary color */
-	private final Color PURPLE = new Color(128, 0, 128);
+	private final Color PURPLE = new Color(51, 0, 111);
 
 	/** Default color for secondary color */
-	private final Color GOLD = new Color(255, 223, 0);;
+	private final Color GOLD = new Color(232, 211, 162);;
 
 	// fields
 
@@ -121,6 +121,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		setupGUI();
 
 	}
+	
 
     /**
      * Helper method to initialize all GUI components
@@ -128,6 +129,8 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	public void setupGUI() {
 		// initialize jframe
 		myFrame = new JFrame("PowerPaint");
+		//add a custom icon to the frame
+		myFrame.setIconImage(myImageIcon.getImage());
 		myFrame.setVisible(true);
 		myFrame.setSize(500, 500);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,11 +144,13 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		// add buttons and menu options
 		setupToolActions();
 		setupTopMenu();
+		myFrame.add(myPanel);
 
 		// put toolbar on the panel
 		myFrame.add(myToolBar, BorderLayout.SOUTH);
 
 	}
+	
 
     /**
      * Setups actions for the tool buttons on the toolbar
@@ -216,12 +221,12 @@ public class PowerPaintGUI implements PropertyChangeListener {
      */
 	public void setupColorButtons() {
 		myPrimaryButton = new JMenuItem("Primary Color...",
-				myColorIcon.getIcon());
+				myColorIcon);
 		myPrimaryButton.setMnemonic(KeyEvent.VK_P);
 		myOptionsMenu.add(myPrimaryButton);
 
 		mySecondaryButton = new JMenuItem("Secondary Color...",
-				myColorIcon2.getIcon());
+				myColorIcon2);
 		mySecondaryButton.setMnemonic(KeyEvent.VK_S);
 		myOptionsMenu.add(mySecondaryButton);
 
@@ -244,8 +249,6 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 			// update primary colors based on input
 			myColorIcon.setColor(colorChoice);
-			ImageIcon update = myColorIcon.createColorIcon(colorChoice);
-			myPrimaryButton.setIcon(update);
 
 			// set the color for the jpanel tool
 			if (colorChoice != null) {
@@ -268,11 +271,9 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 			// update secondary colors based on input
 			myColorIcon2.setColor(colorChoice);
-			ImageIcon update = myColorIcon.createColorIcon(colorChoice);
-			mySecondaryButton.setIcon(update);
 
 			if (colorChoice != null) {
-				myPanel.setColor(colorChoice);
+				myPanel.setSecondaryColor(colorChoice);
 			}
 		}
 

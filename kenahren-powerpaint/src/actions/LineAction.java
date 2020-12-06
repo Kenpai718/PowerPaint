@@ -10,6 +10,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
+import tools.LineTool;
+import tools.PaintTool;
+
 public class LineAction extends AbstractAction {
 	
 	//constants
@@ -18,6 +21,9 @@ public class LineAction extends AbstractAction {
     
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
+    
+    /** The tool that represents the Line. */
+    private final PaintTool myTool;
     
     
     
@@ -34,13 +40,18 @@ public class LineAction extends AbstractAction {
         putValue(Action.SHORT_DESCRIPTION, "A Line");
         
         myPanel = thePanel;
+        myTool = new LineTool();
 
     }
     
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
-
+    	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
+    }
+    
+    public PaintTool getTool() {
+    	return myTool;
     }
     
 }
