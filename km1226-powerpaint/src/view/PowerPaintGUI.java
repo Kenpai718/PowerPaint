@@ -29,10 +29,23 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+<<<<<<< Updated upstream
+=======
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+>>>>>>> Stashed changes
 
 import actions.PencilAction;
 import actions.LineAction;
 import actions.RectangleAction;
+<<<<<<< Updated upstream
+=======
+import tools.EllipseTool;
+import tools.EraserTool;
+import tools.LineTool;
+import tools.PencilTool;
+import tools.RectangleTool;
+>>>>>>> Stashed changes
 import actions.EllipseAction;
 import actions.EraserAction;
 
@@ -89,9 +102,42 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	/** A list of color actions. */
 	private ButtonGroup myToolButtons;
 
+<<<<<<< Updated upstream
 	/** A list of tool actions from actions package. */
 	private List<Action> myToolActions;
 
+=======
+	private JRadioButtonMenuItem myPencilButton;
+	private JRadioButtonMenuItem myLineButton;
+	private JRadioButtonMenuItem myRectangleButton;
+	private JRadioButtonMenuItem myEllipseButton;
+	private JRadioButtonMenuItem myEraserButton;
+	
+	private JToggleButton myPencilToolButton;
+	private JToggleButton myLineToolButton;
+	private JToggleButton myRectangleToolButton;
+	private JToggleButton myEraserToolButton;
+	private JToggleButton myEllipseToolButton;
+	
+	/** A tool for drawing lines. */
+    private final LineTool myLineTool;
+    
+    /** A tool for drawing rectangles. */
+    private final RectangleTool myRectangleTool;
+    
+    /** A tool for drawing ellipses. */
+    private final EllipseTool myEllipseTool;
+    
+    /** A tool for erasing. */
+    private final EraserTool myEraserTool;
+    
+    /** A tool for free drawing. */
+    private final PencilTool myPencilTool;
+	
+	/** A list of tool actions from actions package. */
+	private List<Action> myToolActions;
+	
+>>>>>>> Stashed changes
 	/** Toolbar of tools attached to jpanel */
 	private JToolBar myToolBar;
 
@@ -119,7 +165,17 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		// default UW color setup
 		myColorIcon = new ColorIcon(PURPLE);
 		myColorIcon2 = new ColorIcon(GOLD);
+<<<<<<< Updated upstream
 
+=======
+		
+		myLineTool = new LineTool();
+		myRectangleTool = new RectangleTool();
+		myEllipseTool = new EllipseTool();
+		myPencilTool = new PencilTool();
+		myEraserTool = new EraserTool();
+		
+>>>>>>> Stashed changes
 		// initialize panels, menu, toolbar, etc
 		setupGUI();
 
@@ -143,6 +199,10 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myToolBar = new JToolBar();
 		myToolActions = new ArrayList<Action>();
 		myToolButtons = new ButtonGroup();
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
 
 		// add buttons and menu options
 		setupToolActions();
@@ -151,6 +211,12 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 		// put toolbar on the panel
 		myFrame.add(myToolBar, BorderLayout.SOUTH);
+<<<<<<< Updated upstream
+=======
+		
+		//listen for changes that happen in this panel
+		myPanel.addPropertyChangeListener(this);
+>>>>>>> Stashed changes
 
 	}
 	
@@ -160,6 +226,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
      */
 	public void setupToolActions() {
 
+<<<<<<< Updated upstream
 		myToolActions.add(new PencilAction(myPanel));
 		myToolActions.add(new LineAction(myPanel));
 		myToolActions.add(new RectangleAction(myPanel));
@@ -173,6 +240,36 @@ public class PowerPaintGUI implements PropertyChangeListener {
 			myToolBar.add(tb);
 		}
 	}
+=======
+		myPencilToolButton = new JToggleButton(new PencilAction(myPanel));
+		myPencilToolButton.addActionListener(new PickPencilTool());
+		myToolButtons.add(myPencilToolButton);
+		myToolBar.add(myPencilToolButton);
+		
+		myLineToolButton = new JToggleButton(new LineAction(myPanel));
+		myLineToolButton.addActionListener(new PickLineTool());
+		myToolButtons.add(myLineToolButton);
+		myToolBar.add(myLineToolButton);
+		myLineToolButton.setSelected(true);
+		
+        myRectangleToolButton = new JToggleButton(new RectangleAction(myPanel));
+        myRectangleToolButton.addActionListener(new PickRectangleTool());
+        myToolButtons.add(myRectangleToolButton);
+		myToolBar.add(myRectangleToolButton);
+		
+        myEllipseToolButton = new JToggleButton(new EllipseAction(myPanel));
+        myEllipseToolButton.addActionListener(new PickEllipseTool());
+        myToolButtons.add(myEllipseToolButton);
+		myToolBar.add(myEllipseToolButton);
+		
+        myEraserToolButton = new JToggleButton(new EraserAction(myPanel));
+        myEraserToolButton.addActionListener(new PickEraserTool());
+        myToolButtons.add(myEraserToolButton);
+		myToolBar.add(myEraserToolButton);
+	}
+	
+	
+>>>>>>> Stashed changes
 
     /**
      * Setups up all menu options/buttons at top of panel
@@ -203,6 +300,10 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myOptionsMenu.add(thickMenu);
 		setupThicknessSlider();
 		thickMenu.add(myThicknessSlider);
+<<<<<<< Updated upstream
+=======
+		myThicknessSlider.addChangeListener(new SliderAdjuster());
+>>>>>>> Stashed changes
 		
 		myOptionsMenu.addSeparator();
 
@@ -231,6 +332,23 @@ public class PowerPaintGUI implements PropertyChangeListener {
         myThicknessSlider.setPaintLabels(true);
     }
 	
+<<<<<<< Updated upstream
+=======
+	private class SliderAdjuster implements ChangeListener
+    {
+    	@Override
+    	public void stateChanged(ChangeEvent e)
+    	{
+    		JSlider source = (JSlider)e.getSource();
+    		if(!source.getValueIsAdjusting())
+    		{
+    			int changeValue = (int)source.getValue();
+    			myPanel.setThickness(changeValue);
+    		}
+    	}
+    }
+	
+>>>>>>> Stashed changes
     /**
      * Setups the color buttons under the menu options
      * 
@@ -308,6 +426,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		ButtonGroup group = new ButtonGroup();
 
 		// add the pencil option
+<<<<<<< Updated upstream
 		JRadioButtonMenuItem pencilButton = new JRadioButtonMenuItem("Pencil");
 		pencilButton.setMnemonic(KeyEvent.VK_P);
 		group.add(pencilButton);
@@ -341,6 +460,99 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	}
 
     /**
+=======
+		myPencilButton = new JRadioButtonMenuItem("Pencil", false);
+		myPencilButton.setMnemonic(KeyEvent.VK_P);
+		group.add(myPencilButton);
+		myToolsMenu.add(myPencilButton);
+		myPencilButton.addActionListener(new PickPencilTool());
+
+		// add the line option
+		myLineButton = new JRadioButtonMenuItem("Line", true);
+		myLineButton.setMnemonic(KeyEvent.VK_L);
+		group.add(myLineButton);
+		myToolsMenu.add(myLineButton);
+		myLineButton.addActionListener(new PickLineTool());
+
+		// add the rectangle option
+		myRectangleButton = new JRadioButtonMenuItem("Rectangle", false);
+		myRectangleButton.setMnemonic(KeyEvent.VK_R);
+		group.add(myRectangleButton);
+		myToolsMenu.add(myRectangleButton);
+		myRectangleButton.addActionListener(new PickRectangleTool());
+
+		// add the ellipse option
+		myEllipseButton = new JRadioButtonMenuItem("Ellipse", false);
+		myEllipseButton.setMnemonic(KeyEvent.VK_E);
+		group.add(myEllipseButton);
+		myToolsMenu.add(myEllipseButton);
+		myEllipseButton.addActionListener(new PickEllipseTool());
+
+		// add the eraser option
+		myEraserButton = new JRadioButtonMenuItem("Eraser", false);
+		myEraserButton.setMnemonic(KeyEvent.VK_A);
+		group.add(myEraserButton);
+		myToolsMenu.add(myEraserButton);
+		myEraserButton.addActionListener(new PickEraserTool());
+	}
+
+	private class PickPencilTool implements ActionListener
+    {	
+    	@Override
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		myPanel.setCurrentTool(myPencilTool);
+    		myPencilButton.setSelected(true);
+    		myPencilToolButton.setSelected(true);
+    	}
+    }
+	
+	private class PickLineTool implements ActionListener
+    {	
+    	@Override
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		myPanel.setCurrentTool(myLineTool);
+    		myLineButton.setSelected(true);
+    		myLineToolButton.setSelected(true);
+    	}
+    }
+	
+	private class PickRectangleTool implements ActionListener
+    {	
+    	@Override
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		myPanel.setCurrentTool(myRectangleTool);
+    		myRectangleButton.setSelected(true);
+    		myRectangleToolButton.setSelected(true);
+    	}
+    }
+	
+	private class PickEllipseTool implements ActionListener
+    {	
+    	@Override
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		myPanel.setCurrentTool(myEllipseTool);
+    		myEllipseButton.setSelected(true);
+    		myEllipseToolButton.setSelected(true);
+    	}
+    }
+	
+	private class PickEraserTool implements ActionListener
+    {	
+    	@Override
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		myPanel.setCurrentTool(myEraserTool);
+    		myEraserButton.setSelected(true);
+    		myEraserToolButton.setSelected(true);
+    	}
+    }
+	
+	/**
+>>>>>>> Stashed changes
      * Setups help menu 
      * 
      */

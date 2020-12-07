@@ -8,6 +8,11 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
+<<<<<<< Updated upstream
+=======
+import tools.PaintTool;
+import tools.RectangleTool;
+>>>>>>> Stashed changes
 import view.PaintPanel;
 
 public class RectangleAction extends AbstractAction{
@@ -21,6 +26,11 @@ public class RectangleAction extends AbstractAction{
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
+<<<<<<< Updated upstream
+=======
+    /** The tool that represents the Rectangle. */
+    private final PaintTool myTool;
+>>>>>>> Stashed changes
     
    /**
      * Construct an Action of the rectangle tool.
@@ -30,18 +40,40 @@ public class RectangleAction extends AbstractAction{
     public RectangleAction(final PaintPanel thePanel) {
         super(NAME, ICON);
         
+<<<<<<< Updated upstream
         putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         putValue(Action.SELECTED_KEY, true);
         putValue(Action.SHORT_DESCRIPTION, "A rectangle");
         
         myPanel = thePanel;
+=======
+        
+        myPanel = thePanel;
+        myTool = new RectangleTool();
+        
+        putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
+        putValue(Action.SELECTED_KEY, true);
+        putValue(Action.SHORT_DESCRIPTION, "A rectangle");
+        
+>>>>>>> Stashed changes
 
     }
     
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
+<<<<<<< Updated upstream
 
         myPanel.repaint();
     }
     
+=======
+    	myPanel.setCurrentTool(myTool);
+        myPanel.repaint();
+    }
+    
+    public PaintTool getTool() {
+    	return myTool;
+    }
+    
+>>>>>>> Stashed changes
 }
