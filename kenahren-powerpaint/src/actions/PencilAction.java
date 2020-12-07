@@ -39,7 +39,7 @@ public class PencilAction extends AbstractAction{
         super(NAME, ICON);
         
         myPanel = thePanel;
-        myTool = new LineTool();
+        myTool = new PencilTool();
         
         putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
         putValue(Action.SELECTED_KEY, true);

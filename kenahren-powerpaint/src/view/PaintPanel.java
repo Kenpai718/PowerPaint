@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -13,19 +14,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicDesktopIconUI.MouseInputHandler;
 
+import model.PaintShape;
+import model.PaintPanelProperties;
 import tools.AbstractPaintTool;
 import tools.LineTool;
-import tools.PaintShape;
 import tools.PaintTool;
 import tools.PencilTool;
 
-public class PaintPanel extends JPanel {
+public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	// constants
 
@@ -44,7 +48,7 @@ public class PaintPanel extends JPanel {
 	// fields
 
 	/** List to keep track of all shapes drawn on the panel */
-	private final ArrayList<PaintShape> myPreviousShapes;
+	private ArrayList<PaintShape> myShapesList;
 
 	/** Current shape on panel */
 	private Shape myCurrentShape;
@@ -60,12 +64,15 @@ public class PaintPanel extends JPanel {
 
 	/** Current tool used on the panel */
 	private PaintTool myCurrentTool;
-	
+
 	/** Start position */
 	private Point myStartPoint;
-	
+
 	/** Next/End position */
 	private Point myNextPoint;
+
+	/** Next/End position */
+	private boolean myClear;
 
 	/**
 	 * Paint panel constructor
@@ -75,9 +82,10 @@ public class PaintPanel extends JPanel {
 
 		// initialize some of the base fields
 
-		myPreviousShapes = new ArrayList<PaintShape>();
+		myShapesList = new ArrayList<PaintShape>();
 		myColor = DEFAULT_COLOR;
 		myThickness = DEFAULT_THICKNESS;
+		myClear = false;
 
 		// set default tool
 		// NOTE: should be pencil as default, but for now its line tool
@@ -122,17 +130,23 @@ public class PaintPanel extends JPanel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// draw something
-		g2d.setStroke(new BasicStroke(myThickness));
-		g2d.setPaint(myColor);
-		g2d.draw(myCurrentTool.getShape());
+		// draw something when the panel has not queried to be cleared
+		if (!myClear) {
+			g2d.setStroke(new BasicStroke(myThickness));
+			g2d.setPaint(myColor);
+			g2d.draw(myCurrentTool.getShape());
 
-		// draw previous shapes
-		for (final PaintShape p : myPreviousShapes) {
-			g2d.setStroke(new BasicStroke(p.getThickness()));
-			g2d.setPaint(p.getColor());
-			g2d.draw(p.getShape());
+			// draw previous shapes
+			for (final PaintShape p : myShapesList) {
+				g2d.setStroke(new BasicStroke(p.getThickness()));
+				g2d.setPaint(p.getColor());
+				g2d.draw(p.getShape());
+			}
 		}
+
+		// send a property change to PowerPaintGUI that a change was made
+		// firePropertyChange(string name, boolean oldValue, boolean newValue)
+		firePropertyChange(PROPERTY_SHAPE_ADD, false, !myShapesList.isEmpty());
 
 	}
 
@@ -179,7 +193,16 @@ public class PaintPanel extends JPanel {
 	 */
 	public void saveShape(final Shape theShape) {
 		PaintShape PS = new PaintShape(theShape, myColor, myThickness);
-		myPreviousShapes.add(PS);
+		myShapesList.add(PS);
+	}
+
+	/**
+	 * Clear the shapes list and draw an empty panel
+	 */
+	public void clearShapes() {
+		myShapesList.clear();
+		myClear = true;
+		repaint();
 	}
 
 	// inner class to track mouse input
@@ -190,10 +213,12 @@ public class PaintPanel extends JPanel {
 			myStartPoint = theEvent.getPoint();
 			myNextPoint = myStartPoint;
 
-			//draws a dot when pressed and will extend when dragged
+			// draws a dot when pressed and will extend when dragged
 			myCurrentTool.setStartPoint(myStartPoint);
 			myCurrentTool.setNextPoint(myNextPoint);
 			myCurrentShape = myCurrentTool.getShape();
+
+			repaint();
 		}
 
 		@Override
@@ -211,8 +236,12 @@ public class PaintPanel extends JPanel {
 		@Override
 		// add this new shape to the list
 		public void mouseReleased(final MouseEvent theEvent) {
+			// TODO
+			// Temp myClear until better solution. 
+			myClear = false;
 
 			saveShape(myCurrentShape);
+			repaint();
 		}
 
 		@Override
