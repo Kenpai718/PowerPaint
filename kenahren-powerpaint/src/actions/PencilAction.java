@@ -65,8 +65,5 @@ public class PencilAction extends AbstractAction{
     public String toString() {
     	return NAME;
     }
-    public String getActionName() {
-    	return NAME;
-    }
  
 }
