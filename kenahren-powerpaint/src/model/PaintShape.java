@@ -3,6 +3,13 @@ package model;
 import java.awt.Color;
 import java.awt.Shape;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class PaintShape {
 
 	

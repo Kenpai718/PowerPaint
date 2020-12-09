@@ -31,6 +31,8 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import actions.PencilAction;
 import actions.LineAction;
@@ -38,6 +40,14 @@ import actions.RectangleAction;
 import model.PaintPanelProperties;
 import actions.EllipseAction;
 import actions.EraserAction;
+
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 
 public class PowerPaintGUI
 		implements PropertyChangeListener, PaintPanelProperties {
@@ -58,13 +68,7 @@ public class PowerPaintGUI
 	private static final int MINOR_SPACING = 1;
 
 	/** Slider initial value position. */
-	private static final int THICKNESS_INIT = 10;
-
-	/** Default color for primary color */
-	private final Color PURPLE = new Color(51, 0, 111);
-
-	/** Default color for secondary color */
-	private final Color GOLD = new Color(232, 211, 162);;
+	private static final int THICKNESS_INITIAL = 10;
 
 	// fields below
 
@@ -91,20 +95,27 @@ public class PowerPaintGUI
 	/** The image icon to show in the window title and about window. */
 	private ImageIcon myImageIcon = new ImageIcon("./images/w.gif");
 
+	/** Thickness slider */
 	private JSlider myThicknessSlider;
 
+	/** Clear button in options. */
 	private JMenuItem myClearButton;
 
 	// toolbar fields
 
-	/** A list of color actions. */
-	private ButtonGroup myToolButtons;
+	/** A button group for tool actions in toolbar*/
+	private ButtonGroup myToolBarButtons;
+	
+	/** A button group for tool actions in tool menu*/
+	private ButtonGroup myToolMenuButtons;
 
 	/** A list of tool actions from actions package. */
 	private List<Action> myToolActions;
 
 	/** Toolbar of tools attached to jpanel */
 	private JToolBar myToolBar;
+	
+	
 
 	// fields for color options
 
@@ -119,6 +130,9 @@ public class PowerPaintGUI
 
 	/** Secondary color icon */
 	private final ColorIcon myColorIcon2;
+	
+	/** Sets default tool action */
+	private Action myDefaultAction;
 
 	/**
 	 * Constructor of PowerPaintGUI
@@ -127,8 +141,8 @@ public class PowerPaintGUI
 	public PowerPaintGUI() {
 
 		// default UW color setup
-		myColorIcon = new ColorIcon(PURPLE);
-		myColorIcon2 = new ColorIcon(GOLD);
+		myColorIcon = new ColorIcon(DEFAULT_PRIMARY);
+		myColorIcon2 = new ColorIcon(DEFAULT_SECONDARY);
 
 		// initialize panels, menu, toolbar, etc
 		setupGUI();
@@ -147,11 +161,20 @@ public class PowerPaintGUI
 		// initialize fields like menus
 		myPanel = new PaintPanel();
 		myToolBar = new JToolBar();
+		myToolBarButtons = new ButtonGroup();
+		myToolMenuButtons = new ButtonGroup();
+		
+		//initialize tool actions for buttons
+		myDefaultAction = new LineAction(myPanel);
 		myToolActions = new ArrayList<Action>();
-		myToolButtons = new ButtonGroup();
+		myToolActions.add(new PencilAction(myPanel));
+		myToolActions.add(myDefaultAction); //line tool
+		myToolActions.add(new RectangleAction(myPanel));
+		myToolActions.add(new EllipseAction(myPanel));
+		myToolActions.add(new EraserAction(myPanel));
 
 		// add buttons and menu options
-		setupToolActions();
+		setupToolBarActions();
 		setupTopMenu();
 		myFrame.add(myPanel);
 
@@ -172,20 +195,22 @@ public class PowerPaintGUI
 	/**
 	 * Setups actions for the tool buttons on the toolbar
 	 */
-	public void setupToolActions() {
+	public void setupToolBarActions() {
 
-		myToolActions.add(new PencilAction(myPanel));
-		myToolActions.add(new LineAction(myPanel));
-		myToolActions.add(new RectangleAction(myPanel));
-		myToolActions.add(new EllipseAction(myPanel));
-		myToolActions.add(new EraserAction(myPanel));
-
-		// associate tool buttons with actions
+		// associate tool buttons with actions and add to toolbar
 		for (final Action act : myToolActions) {
 			final JToggleButton tb = new JToggleButton(act);
-			myToolButtons.add(tb);
+			myToolBarButtons.add(tb);
 			myToolBar.add(tb);
+			
+			//selects the line tool at the start as default
+			if(tb.getAction() == myDefaultAction) {
+				tb.setSelected(true);
+			}
+			
 		}
+		
+
 
 	}
 
@@ -218,6 +243,7 @@ public class PowerPaintGUI
 		myOptionsMenu.add(thickMenu);
 		setupThicknessSlider();
 		thickMenu.add(myThicknessSlider);
+		myThicknessSlider.addChangeListener(new SliderAdjuster());
 
 		myOptionsMenu.addSeparator();
 
@@ -244,7 +270,7 @@ public class PowerPaintGUI
 
 	public void setupThicknessSlider() {
 		myThicknessSlider = new JSlider(THICKNESS_MIN, THICKNESS_MAX,
-				THICKNESS_INIT);
+				THICKNESS_INITIAL);
 		myThicknessSlider.setMajorTickSpacing(MAJOR_SPACING);
 		myThicknessSlider.setMinorTickSpacing(MINOR_SPACING);
 		myThicknessSlider.setPaintTicks(true);
@@ -278,7 +304,7 @@ public class PowerPaintGUI
 
 			// gets the color choice from user input
 			final Color colorChoice = JColorChooser.showDialog(null,
-					"Select a color", PURPLE);
+					"Select a color", DEFAULT_PRIMARY);
 
 			// update primary colors based on input
 			myColorIcon.setColor(colorChoice);
@@ -299,7 +325,7 @@ public class PowerPaintGUI
 		public void actionPerformed(ActionEvent e) {
 
 			final Color colorChoice = JColorChooser.showDialog(null,
-					"Select a color", GOLD);
+					"Select a color", DEFAULT_SECONDARY);
 
 			// update secondary colors based on input
 			myColorIcon2.setColor(colorChoice);
@@ -320,40 +346,21 @@ public class PowerPaintGUI
 		myToolsMenu.setMnemonic(KeyEvent.VK_T);
 		myMenuBar.add(myToolsMenu);
 
-		// create the radio list for our tools
-		ButtonGroup group = new ButtonGroup();
+		
+		// associate tool buttons with actions and add to toolbar
+		for (final Action act : myToolActions) {
+			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
 
-		// add the pencil option
-		JRadioButtonMenuItem pencilButton = new JRadioButtonMenuItem("Pencil");
-		pencilButton.setMnemonic(KeyEvent.VK_P);
-		group.add(pencilButton);
-		myToolsMenu.add(pencilButton);
+			myToolMenuButtons.add(rb);
+			myToolsMenu.add(rb);
+			
+			//selects the line tool at the start as default
+			if(rb.getAction() == myDefaultAction) {
+				rb.setSelected(true);
+			}
+			
+		}
 
-		// add the line option
-		JRadioButtonMenuItem lineButton = new JRadioButtonMenuItem("Line");
-		lineButton.setMnemonic(KeyEvent.VK_L);
-		group.add(lineButton);
-		myToolsMenu.add(lineButton);
-
-		// add the rectangle option
-		JRadioButtonMenuItem rectangleButton = new JRadioButtonMenuItem(
-				"Rectangle");
-		rectangleButton.setMnemonic(KeyEvent.VK_R);
-		group.add(rectangleButton);
-		myToolsMenu.add(rectangleButton);
-
-		// add the ellipse option
-		JRadioButtonMenuItem ellipseButton = new JRadioButtonMenuItem(
-				"Ellipse");
-		ellipseButton.setMnemonic(KeyEvent.VK_E);
-		group.add(ellipseButton);
-		myToolsMenu.add(ellipseButton);
-
-		// add the eraser option
-		JRadioButtonMenuItem eraserButton = new JRadioButtonMenuItem("Eraser");
-		eraserButton.setMnemonic(KeyEvent.VK_A);
-		group.add(eraserButton);
-		myToolsMenu.add(eraserButton);
 	}
 
 	/**
@@ -386,6 +393,20 @@ public class PowerPaintGUI
 		}
 
 	}
+	
+	private class SliderAdjuster implements ChangeListener
+    {
+    	@Override
+    	public void stateChanged(ChangeEvent e)
+    	{
+    		JSlider source = (JSlider)e.getSource();
+    		if(!source.getValueIsAdjusting())
+    		{
+    			int changeValue = (int)source.getValue();
+    			myPanel.setThickness(changeValue);
+    		}
+    	}
+    }
 
 	class PopOutAction implements ActionListener {
 		@Override
@@ -402,7 +423,7 @@ public class PowerPaintGUI
 			// creates the pop up window when "about" is clicked with our custom
 			// title, message, and icon
 			JOptionPane.showMessageDialog(null,
-					"Katlyn and Kenneth \nAutumn 2020 \nTCSS 305 Assignment 4",
+					"Katlyn Malone and Kenneth \nAutumn 2020 \nTCSS 305 Assignment 4",
 					"About", JOptionPane.INFORMATION_MESSAGE, icon2);
 		}
 	}

@@ -15,6 +15,13 @@ import tools.PaintTool;
 import tools.PencilTool;
 import view.PaintPanel;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class PencilAction extends AbstractAction{
 	
 	//constants
@@ -52,6 +59,14 @@ public class PencilAction extends AbstractAction{
     public void actionPerformed(final ActionEvent theEvent) {
     	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
+    }
+    
+    @Override
+    public String toString() {
+    	return NAME;
+    }
+    public String getActionName() {
+    	return NAME;
     }
  
 }

@@ -3,6 +3,13 @@ package tools;
 import java.awt.Point;
 import java.awt.Shape;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public abstract class AbstractPaintTool implements PaintTool {
 	
 	public static final Point NO_POINT = new Point(-50, -50);
@@ -53,5 +60,5 @@ public abstract class AbstractPaintTool implements PaintTool {
 	
 	@Override
 	public abstract void setNextPoint(Point thePoint);
-
+	
 }

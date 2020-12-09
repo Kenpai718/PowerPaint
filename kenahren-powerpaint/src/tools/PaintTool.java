@@ -3,6 +3,13 @@ package tools;
 import java.awt.Point;
 import java.awt.Shape;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public interface PaintTool {
 	
 	String getName();

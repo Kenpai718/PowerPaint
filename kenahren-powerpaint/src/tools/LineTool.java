@@ -5,6 +5,13 @@ import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class LineTool extends AbstractPaintTool {
 
 	private static final String NAME = "Line";
@@ -39,6 +46,10 @@ public class LineTool extends AbstractPaintTool {
 	public void reset() {
 		super.reset();
 		myNextPoint = NO_POINT;
+	}
+	
+	public String getName() {
+		return NAME;
 	}
 
 }

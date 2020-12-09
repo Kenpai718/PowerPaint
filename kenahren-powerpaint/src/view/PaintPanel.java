@@ -29,6 +29,13 @@ import tools.LineTool;
 import tools.PaintTool;
 import tools.PencilTool;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	// constants
@@ -41,9 +48,6 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	/** The initial point of the tool. */
 	private static final Point INITIAL_POINT = new Point(0, 0);
-
-	/** The default UW Purple drawing color. */
-	private static final Color DEFAULT_COLOR = new Color(51, 0, 111);
 
 	// fields
 
@@ -83,7 +87,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		// initialize some of the base fields
 
 		myShapesList = new ArrayList<PaintShape>();
-		myColor = DEFAULT_COLOR;
+		myColor = DEFAULT_PRIMARY;
 		myThickness = DEFAULT_THICKNESS;
 		myClear = false;
 
@@ -131,6 +135,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// draw something when the panel has not queried to be cleared
+		// and thickness is not set to 0
 		if (!myClear) {
 			g2d.setStroke(new BasicStroke(myThickness));
 			g2d.setPaint(myColor);
@@ -142,11 +147,14 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				g2d.setPaint(p.getColor());
 				g2d.draw(p.getShape());
 			}
-		}
 
-		// send a property change to PowerPaintGUI that a change was made
-		// firePropertyChange(string name, boolean oldValue, boolean newValue)
-		firePropertyChange(PROPERTY_SHAPE_ADD, false, !myShapesList.isEmpty());
+			// send a property change to PowerPaintGUI that a change was
+			// made
+			// firePropertyChange(string name, boolean oldValue, boolean
+			// newValue)
+			firePropertyChange(PROPERTY_SHAPE_ADD, false,
+					!myShapesList.isEmpty());
+		}
 
 	}
 
@@ -210,38 +218,42 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		@Override
 		// set start point at mouse click
 		public void mousePressed(final MouseEvent theEvent) {
-			myStartPoint = theEvent.getPoint();
-			myNextPoint = myStartPoint;
+			if (myThickness > 0) {
+				myStartPoint = theEvent.getPoint();
+				myNextPoint = myStartPoint;
 
-			// draws a dot when pressed and will extend when dragged
-			myCurrentTool.setStartPoint(myStartPoint);
-			myCurrentTool.setNextPoint(myNextPoint);
-			myCurrentShape = myCurrentTool.getShape();
+				// draws a dot when pressed and will extend when dragged
+				myCurrentTool.setStartPoint(myStartPoint);
+				myCurrentTool.setNextPoint(myNextPoint);
+				myCurrentShape = myCurrentTool.getShape();
 
-			repaint();
+				repaint();
+			}
 		}
 
 		@Override
 		// set the ending point
 		public void mouseDragged(final MouseEvent theEvent) {
 
-			myNextPoint = theEvent.getPoint();
-			myCurrentTool.setNextPoint(myNextPoint);
-			myCurrentShape = myCurrentTool.getShape();
+			if (myThickness > 0) {
+				myNextPoint = theEvent.getPoint();
+				myCurrentTool.setNextPoint(myNextPoint);
+				myCurrentShape = myCurrentTool.getShape();
 
-			// update panel with new line that follows the drag
-			repaint();
+				// update panel with new line that follows the drag
+				repaint();
+			}
 		}
 
 		@Override
 		// add this new shape to the list
 		public void mouseReleased(final MouseEvent theEvent) {
-			// TODO
-			// Temp myClear until better solution. 
-			myClear = false;
+			if (myThickness > 0) {
+				myClear = false;
 
-			saveShape(myCurrentShape);
-			repaint();
+				saveShape(myCurrentShape);
+				repaint();
+			}
 		}
 
 		@Override

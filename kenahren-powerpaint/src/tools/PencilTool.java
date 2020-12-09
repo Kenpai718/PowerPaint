@@ -5,11 +5,18 @@ import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Path2D;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class PencilTool extends AbstractPaintTool {
 	
-	private static final String MY_NAME = "Pencil";
+	private static final String NAME = "Pencil";
 	
-	private static final int MY_MNEMONIC = KeyEvent.VK_P;
+	private static final int MNEMONIC = KeyEvent.VK_P;
 	
 	private Point myNextPoint;
 	
@@ -17,7 +24,7 @@ public class PencilTool extends AbstractPaintTool {
 	
 	
 	public PencilTool() {
-		super(MY_NAME, MY_MNEMONIC);
+		super(NAME, MNEMONIC);
 		myNextPoint = NO_POINT;
 		myPen = new Path2D.Double();
 	}

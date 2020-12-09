@@ -12,6 +12,13 @@ import tools.PaintTool;
 import tools.RectangleTool;
 import view.PaintPanel;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class RectangleAction extends AbstractAction{
 
     
@@ -40,7 +47,7 @@ public class RectangleAction extends AbstractAction{
         
         putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
         putValue(Action.SELECTED_KEY, true);
-        putValue(Action.SHORT_DESCRIPTION, "A rectangle");
+        putValue(Action.SHORT_DESCRIPTION, "A Rectangle");
         
 
     }
@@ -55,4 +62,9 @@ public class RectangleAction extends AbstractAction{
     	return myTool;
     }
     
+
+    @Override
+    public String toString() {
+    	return NAME;
+    }
 }

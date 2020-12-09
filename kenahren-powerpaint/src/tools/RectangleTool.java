@@ -6,6 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class RectangleTool extends AbstractPaintTool {
 
 	private static final String MY_NAME = "Rectangle";

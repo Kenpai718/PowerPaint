@@ -13,6 +13,13 @@ import javax.swing.ImageIcon;
 import tools.LineTool;
 import tools.PaintTool;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class LineAction extends AbstractAction {
 	
 	//constants
@@ -55,4 +62,8 @@ public class LineAction extends AbstractAction {
     	return myTool;
     }
     
+    @Override
+    public String toString() {
+    	return NAME;
+    }
 }

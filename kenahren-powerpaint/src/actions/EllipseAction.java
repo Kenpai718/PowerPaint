@@ -12,6 +12,13 @@ import tools.EllipseTool;
 import tools.PaintTool;
 import view.PaintPanel;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class EllipseAction extends AbstractAction {
 	
 	//constants
@@ -38,7 +45,7 @@ public class EllipseAction extends AbstractAction {
         
         putValue(Action.MNEMONIC_KEY, myTool.getMnemonic());
         putValue(Action.SELECTED_KEY, true);
-        putValue(Action.SHORT_DESCRIPTION, "A Eclipse");
+        putValue(Action.SHORT_DESCRIPTION, "An Eclipse");
 
     }
     
@@ -46,6 +53,11 @@ public class EllipseAction extends AbstractAction {
     public void actionPerformed(final ActionEvent theEvent) {
     	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
+    }
+    
+    @Override
+    public String toString() {
+    	return NAME;
     }
     
 }

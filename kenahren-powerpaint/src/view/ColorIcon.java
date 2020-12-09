@@ -6,6 +6,13 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
 public class ColorIcon implements Icon {
 	
     /** The color of the icon. */
