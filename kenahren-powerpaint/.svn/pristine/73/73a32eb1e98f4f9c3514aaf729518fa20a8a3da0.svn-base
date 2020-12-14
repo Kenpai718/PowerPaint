@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -32,7 +31,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -50,10 +48,12 @@ import actions.EraserAction;
  * @version Fall 2020
  */
 
+
 public class PowerPaintGUI
 		implements PropertyChangeListener, PaintPanelProperties {
 
 	// constants
+	
 
 	/** Slider minimum value. */
 	private static final int THICKNESS_MIN = 0;
@@ -101,18 +101,12 @@ public class PowerPaintGUI
 	/** Clear button in options. */
 	private JMenuItem myClearButton;
 
-	/** Clear button in options. */
-	private JMenuItem myUndoButton;
-
-	/** Clear button in options. */
-	private JMenuItem myRedoButton;
-
 	// toolbar fields
 
-	/** A button group for tool actions in toolbar */
+	/** A button group for tool actions in toolbar*/
 	private ButtonGroup myToolBarButtons;
-
-	/** A button group for tool actions in tool menu */
+	
+	/** A button group for tool actions in tool menu*/
 	private ButtonGroup myToolMenuButtons;
 
 	/** A list of tool actions from actions package. */
@@ -120,6 +114,8 @@ public class PowerPaintGUI
 
 	/** Toolbar of tools attached to jpanel */
 	private JToolBar myToolBar;
+	
+	
 
 	// fields for color options
 
@@ -134,7 +130,7 @@ public class PowerPaintGUI
 
 	/** Secondary color icon */
 	private final ColorIcon myColorIcon2;
-
+	
 	/** Sets default tool action */
 	private Action myDefaultAction;
 
@@ -167,12 +163,12 @@ public class PowerPaintGUI
 		myToolBar = new JToolBar();
 		myToolBarButtons = new ButtonGroup();
 		myToolMenuButtons = new ButtonGroup();
-
-		// initialize tool actions for buttons
+		
+		//initialize tool actions for buttons
 		myDefaultAction = new LineAction(myPanel);
 		myToolActions = new ArrayList<Action>();
 		myToolActions.add(new PencilAction(myPanel));
-		myToolActions.add(myDefaultAction); // line tool
+		myToolActions.add(myDefaultAction); //line tool
 		myToolActions.add(new RectangleAction(myPanel));
 		myToolActions.add(new EllipseAction(myPanel));
 		myToolActions.add(new EraserAction(myPanel));
@@ -206,13 +202,15 @@ public class PowerPaintGUI
 			final JToggleButton tb = new JToggleButton(act);
 			myToolBarButtons.add(tb);
 			myToolBar.add(tb);
-
-			// selects the line tool at the start as default
-			if (tb.getAction() == myDefaultAction) {
+			
+			//selects the line tool at the start as default
+			if(tb.getAction() == myDefaultAction) {
 				tb.setSelected(true);
 			}
-
+			
 		}
+		
+
 
 	}
 
@@ -261,24 +259,6 @@ public class PowerPaintGUI
 
 		// adds the clear function
 		myOptionsMenu.add(myClearButton);
-		myOptionsMenu.addSeparator();
-
-		// undo option
-		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Y);
-		myUndoButton.setAccelerator(KeyStroke.getKeyStroke(
-                   KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-		myUndoButton.setEnabled(false);
-		myUndoButton.addActionListener(new UndoAction());
-		myOptionsMenu.add(myUndoButton);
-
-		// redo option
-		myRedoButton = new JMenuItem("Redo", KeyEvent.VK_Y);
-        myRedoButton.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
-		myRedoButton.setEnabled(false);
-		myRedoButton.addActionListener(new RedoAction());
-		myOptionsMenu.add(myRedoButton);
-
 		myOptionsMenu.addSeparator();
 
 		// extra option in case user wants to exit
@@ -366,18 +346,19 @@ public class PowerPaintGUI
 		myToolsMenu.setMnemonic(KeyEvent.VK_T);
 		myMenuBar.add(myToolsMenu);
 
+		
 		// associate tool buttons with actions and add to toolbar
 		for (final Action act : myToolActions) {
 			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
 
 			myToolMenuButtons.add(rb);
 			myToolsMenu.add(rb);
-
-			// selects the line tool at the start as default
-			if (rb.getAction() == myDefaultAction) {
+			
+			//selects the line tool at the start as default
+			if(rb.getAction() == myDefaultAction) {
 				rb.setSelected(true);
 			}
-
+			
 		}
 
 	}
@@ -403,6 +384,7 @@ public class PowerPaintGUI
 			if (myClearButton.isEnabled()) {
 
 				myPanel.clearShapes(); // clear stored info on panel
+				myPanel.repaint();
 
 				myClearButton.setEnabled(false);
 
@@ -411,45 +393,20 @@ public class PowerPaintGUI
 		}
 
 	}
-
-	class UndoAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (myUndoButton.isEnabled()) {
-
-				myPanel.undo(); 
-
-			}
-
-		}
-
-	}
-
-	class RedoAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (myRedoButton.isEnabled()) {
-
-				myPanel.redo(); 
-
-			}
-
-		}
-
-	}
-
-	private class SliderAdjuster implements ChangeListener {
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			JSlider source = (JSlider) e.getSource();
-			if (!source.getValueIsAdjusting()) {
-				int changeValue = (int) source.getValue();
-				myPanel.setThickness(changeValue);
-			}
-		}
-	}
+	
+	private class SliderAdjuster implements ChangeListener
+    {
+    	@Override
+    	public void stateChanged(ChangeEvent e)
+    	{
+    		JSlider source = (JSlider)e.getSource();
+    		if(!source.getValueIsAdjusting())
+    		{
+    			int changeValue = (int)source.getValue();
+    			myPanel.setThickness(changeValue);
+    		}
+    	}
+    }
 
 	class PopOutAction implements ActionListener {
 		@Override
@@ -466,7 +423,7 @@ public class PowerPaintGUI
 			// creates the pop up window when "about" is clicked with our custom
 			// title, message, and icon
 			JOptionPane.showMessageDialog(null,
-					"Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4",
+					"Katlyn Malone and Kenneth \nAutumn 2020 \nTCSS 305 Assignment 4",
 					"About", JOptionPane.INFORMATION_MESSAGE, icon2);
 		}
 	}
@@ -485,16 +442,9 @@ public class PowerPaintGUI
 
 	@Override
 	public void propertyChange(PropertyChangeEvent theEvent) {
-		final boolean status = (Boolean) theEvent.getNewValue();
-		
-		if (PROPERTY_SHAPE_HAS_SHAPE.equals(theEvent.getPropertyName())) {
-			myClearButton.setEnabled(status);
-			myUndoButton.setEnabled(status);
+		if (PROPERTY_SHAPE_ADD.equals(theEvent.getPropertyName())) {
+			myClearButton.setEnabled(true);
 		}
-		
-		if (PROPERTY_SHAPE_REDO.equals(theEvent.getPropertyName())) {
-			myRedoButton.setEnabled(status);
-		} 
 
 	}
 }
