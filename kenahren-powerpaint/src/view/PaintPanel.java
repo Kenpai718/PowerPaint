@@ -273,9 +273,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	// inner class to track mouse input
 	class MouseHandler extends MouseInputAdapter {
+		
 		@Override
 		// set start point at mouse click
 		public void mousePressed(final MouseEvent theEvent) {
+			
 			if (myThickness > 0) {
 				myStartPoint = theEvent.getPoint();
 				myNextPoint = myStartPoint;

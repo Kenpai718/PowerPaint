@@ -57,6 +57,15 @@ public class ColorIcon implements Icon {
         myColor = theColor;
     }
     
+    /** 
+     * Getter for myColor
+     * 
+     * @return current color of icon
+     */
+    public Color getColor() {
+        return myColor;
+    }
+    
     @Override
     public int getIconWidth() {
         return WIDTH;

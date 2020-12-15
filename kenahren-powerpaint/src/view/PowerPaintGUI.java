@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,6 +37,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputAdapter;
 
 import actions.PencilAction;
 import actions.LineAction;
@@ -191,8 +194,11 @@ public class PowerPaintGUI
 		myFrame.setLocationRelativeTo(null);
 		myFrame.setVisible(true);
 
+		//listeners
 		// listen for changes that happen in this paintpanel
 		myPanel.addPropertyChangeListener(this);
+		// listen for right or left click on the panel
+		myPanel.addMouseListener(new ClickListener());
 
 	}
 
@@ -263,7 +269,7 @@ public class PowerPaintGUI
 		myOptionsMenu.add(myClearButton);
 		myOptionsMenu.addSeparator();
 
-		// undo option
+		// undo option: Shorcut ctrl + z
 		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Y);
 		myUndoButton.setAccelerator(KeyStroke.getKeyStroke(
                    KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
@@ -271,7 +277,7 @@ public class PowerPaintGUI
 		myUndoButton.addActionListener(new UndoAction());
 		myOptionsMenu.add(myUndoButton);
 
-		// redo option
+		// redo option: Shortcut ctrl + y
 		myRedoButton = new JMenuItem("Redo", KeyEvent.VK_Y);
         myRedoButton.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
@@ -437,6 +443,26 @@ public class PowerPaintGUI
 			}
 
 		}
+
+	}
+	
+	class ClickListener extends MouseInputAdapter{
+		
+		int leftClick = MouseEvent.BUTTON1;
+		int rightClick = MouseEvent.BUTTON3;
+
+		@Override
+		public void mousePressed(MouseEvent theEvent) {
+			if(theEvent.getButton() == leftClick) {
+				myPanel.setColor(myColorIcon.getColor());
+			} else if(theEvent.getButton() == rightClick) {
+				myPanel.setColor(myColorIcon2.getColor());
+			}
+			
+		}
+		
+		
+
 
 	}
 
