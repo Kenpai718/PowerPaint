@@ -13,6 +13,16 @@ import javax.swing.ImageIcon;
 import tools.LineTool;
 import tools.PaintTool;
 
+<<<<<<< Updated upstream
+=======
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+>>>>>>> Stashed changes
 public class LineAction extends AbstractAction {
 	
 	//constants
@@ -25,7 +35,11 @@ public class LineAction extends AbstractAction {
     /** The tool that represents the Line. */
     private final PaintTool myTool;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
+=======
+  
+>>>>>>> Stashed changes
 =======
   
 >>>>>>> Stashed changes
@@ -40,6 +54,7 @@ public class LineAction extends AbstractAction {
         super(NAME, ICON);
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
         putValue(Action.SELECTED_KEY, true);
         putValue(Action.SHORT_DESCRIPTION, "A Line");
@@ -47,6 +62,8 @@ public class LineAction extends AbstractAction {
         myPanel = thePanel;
         myTool = new LineTool();
 =======
+=======
+>>>>>>> Stashed changes
         myPanel = thePanel;
         myTool = new LineTool();
         
@@ -54,6 +71,9 @@ public class LineAction extends AbstractAction {
         putValue(Action.SELECTED_KEY, true);
         putValue(Action.SHORT_DESCRIPTION, "A Line");
         
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     }
@@ -68,4 +88,11 @@ public class LineAction extends AbstractAction {
     	return myTool;
     }
     
+<<<<<<< Updated upstream
+=======
+    @Override
+    public String toString() {
+    	return NAME;
+    }
+>>>>>>> Stashed changes
 }

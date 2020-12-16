@@ -6,6 +6,16 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
+<<<<<<< Updated upstream
+=======
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+>>>>>>> Stashed changes
 public class ColorIcon implements Icon {
 	
     /** The color of the icon. */
@@ -50,6 +60,18 @@ public class ColorIcon implements Icon {
         myColor = theColor;
     }
     
+<<<<<<< Updated upstream
+=======
+    /** 
+     * Getter for myColor
+     * 
+     * @return current color of icon
+     */
+    public Color getColor() {
+        return myColor;
+    }
+    
+>>>>>>> Stashed changes
     @Override
     public int getIconWidth() {
         return WIDTH;

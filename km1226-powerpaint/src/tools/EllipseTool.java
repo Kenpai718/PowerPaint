@@ -6,6 +6,16 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
+<<<<<<< Updated upstream
+=======
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+>>>>>>> Stashed changes
 public class EllipseTool extends AbstractPaintTool {
 
 	private static final String MY_NAME = "Ellipse";

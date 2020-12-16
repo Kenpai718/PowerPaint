@@ -1,13 +1,25 @@
 package view;
 
 import java.awt.BorderLayout;
+<<<<<<< Updated upstream
 import java.awt.Color;
+=======
+
+
+import java.awt.Color;
+import java.awt.Dimension;
+>>>>>>> Stashed changes
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+<<<<<<< Updated upstream
+=======
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+>>>>>>> Stashed changes
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,14 +42,22 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+>>>>>>> Stashed changes
+=======
+import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputAdapter;
 >>>>>>> Stashed changes
 
 import actions.PencilAction;
 import actions.LineAction;
 import actions.RectangleAction;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
 import tools.EllipseTool;
@@ -50,6 +70,21 @@ import actions.EllipseAction;
 import actions.EraserAction;
 
 public class PowerPaintGUI implements PropertyChangeListener {
+=======
+import model.PaintPanelProperties;
+import actions.EllipseAction;
+import actions.EraserAction;
+
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+public class PowerPaintGUI
+		implements PropertyChangeListener, PaintPanelProperties {
+>>>>>>> Stashed changes
 
 	// constants
 
@@ -66,6 +101,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	private static final int MINOR_SPACING = 1;
 
 	/** Slider initial value position. */
+<<<<<<< Updated upstream
 	private static final int THICKNESS_INIT = 10;
 
 	/** Default color for primary color */
@@ -75,6 +111,11 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	private final Color GOLD = new Color(232, 211, 162);;
 
 	// fields
+=======
+	private static final int THICKNESS_INITIAL = 10;
+
+	// fields below
+>>>>>>> Stashed changes
 
 	/** A drawing panel. */
 	private PaintPanel myPanel;
@@ -82,6 +123,11 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	/** The window for this GUI. */
 	private JFrame myFrame;
 
+<<<<<<< Updated upstream
+=======
+	// menu fields
+
+>>>>>>> Stashed changes
 	/** The top menu for this GUI. */
 	private JMenuBar myMenuBar;
 
@@ -96,6 +142,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 	/** The image icon to show in the window title and about window. */
 	private ImageIcon myImageIcon = new ImageIcon("./images/w.gif");
+<<<<<<< Updated upstream
 	
 	private JSlider myThicknessSlider;
 	
@@ -142,12 +189,43 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	private JToolBar myToolBar;
 
 	// fields below for color options
+=======
+
+	/** Thickness slider */
+	private JSlider myThicknessSlider;
+
+	/** Clear button in options. */
+	private JMenuItem myClearButton;
+
+	/** Clear button in options. */
+	private JMenuItem myUndoButton;
+
+	/** Clear button in options. */
+	private JMenuItem myRedoButton;
+
+	// toolbar fields
+
+	/** A button group for tool actions in toolbar */
+	private ButtonGroup myToolBarButtons;
+
+	/** A button group for tool actions in tool menu */
+	private ButtonGroup myToolMenuButtons;
+
+	/** A list of tool actions from actions package. */
+	private List<Action> myToolActions;
+
+	/** Toolbar of tools attached to jpanel */
+	private JToolBar myToolBar;
+
+	// fields for color options
+>>>>>>> Stashed changes
 
 	/** Primary color menu button in options menu */
 	private JMenuItem myPrimaryButton;
 
 	/** Secondary color menu button in options menu */
 	private JMenuItem mySecondaryButton;
+<<<<<<< Updated upstream
 	
 	/** Primary color icon */
 	private final ColorIcon myColorIcon;
@@ -176,10 +254,33 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myEraserTool = new EraserTool();
 		
 >>>>>>> Stashed changes
+=======
+
+	/** Primary color icon */
+	private final ColorIcon myColorIcon;
+
+	/** Secondary color icon */
+	private final ColorIcon myColorIcon2;
+
+	/** Sets default tool action */
+	private Action myDefaultAction;
+
+	/**
+	 * Constructor of PowerPaintGUI
+	 * 
+	 */
+	public PowerPaintGUI() {
+
+		// default UW color setup
+		myColorIcon = new ColorIcon(DEFAULT_PRIMARY);
+		myColorIcon2 = new ColorIcon(DEFAULT_SECONDARY);
+
+>>>>>>> Stashed changes
 		// initialize panels, menu, toolbar, etc
 		setupGUI();
 
 	}
+<<<<<<< Updated upstream
 	
 
     /**
@@ -193,10 +294,22 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myFrame.setVisible(true);
 		myFrame.setSize(500, 500);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+=======
+
+	/**
+	 * Helper method to initialize all GUI components
+	 */
+	public void setupGUI() {
+		// initialize jframe
+		myFrame = new JFrame("PowerPaint");
+		// add a custom icon to the frame
+		myFrame.setIconImage(myImageIcon.getImage());
+>>>>>>> Stashed changes
 
 		// initialize fields like menus
 		myPanel = new PaintPanel();
 		myToolBar = new JToolBar();
+<<<<<<< Updated upstream
 		myToolActions = new ArrayList<Action>();
 		myToolButtons = new ButtonGroup();
 <<<<<<< Updated upstream
@@ -206,11 +319,28 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 		// add buttons and menu options
 		setupToolActions();
+=======
+		myToolBarButtons = new ButtonGroup();
+		myToolMenuButtons = new ButtonGroup();
+
+		// initialize tool actions for buttons
+		myDefaultAction = new LineAction(myPanel);
+		myToolActions = new ArrayList<Action>();
+		myToolActions.add(new PencilAction(myPanel));
+		myToolActions.add(myDefaultAction); // line tool
+		myToolActions.add(new RectangleAction(myPanel));
+		myToolActions.add(new EllipseAction(myPanel));
+		myToolActions.add(new EraserAction(myPanel));
+
+		// add buttons and menu options
+		setupToolBarActions();
+>>>>>>> Stashed changes
 		setupTopMenu();
 		myFrame.add(myPanel);
 
 		// put toolbar on the panel
 		myFrame.add(myToolBar, BorderLayout.SOUTH);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
 		
@@ -274,6 +404,44 @@ public class PowerPaintGUI implements PropertyChangeListener {
     /**
      * Setups up all menu options/buttons at top of panel
      */
+=======
+
+		// finalize frame
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		myFrame.pack();
+		myFrame.setLocationRelativeTo(null);
+		myFrame.setVisible(true);
+
+		//listeners
+		// listen for changes that happen in this paintpanel
+		myPanel.addPropertyChangeListener(this);
+
+	}
+
+	/**
+	 * Setups actions for the tool buttons on the toolbar
+	 */
+	public void setupToolBarActions() {
+
+		// associate tool buttons with actions and add to toolbar
+		for (final Action act : myToolActions) {
+			final JToggleButton tb = new JToggleButton(act);
+			myToolBarButtons.add(tb);
+			myToolBar.add(tb);
+
+			// selects the line tool at the start as default
+			if (tb.getAction() == myDefaultAction) {
+				tb.setSelected(true);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Setups up all menu options/buttons at top of panel
+	 */
+>>>>>>> Stashed changes
 	public void setupTopMenu() {
 		myMenuBar = new JMenuBar();
 		myFrame.setJMenuBar(myMenuBar);
@@ -285,10 +453,17 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 	}
 
+<<<<<<< Updated upstream
     /**
      * Setups the options menu
      * 
      */
+=======
+	/**
+	 * Setups the options menu
+	 * 
+	 */
+>>>>>>> Stashed changes
 	public void setupMenuOptions() {
 		myOptionsMenu = new JMenu("Options");
 		myOptionsMenu.setMnemonic(KeyEvent.VK_O);
@@ -301,10 +476,15 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		setupThicknessSlider();
 		thickMenu.add(myThicknessSlider);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 		myThicknessSlider.addChangeListener(new SliderAdjuster());
 >>>>>>> Stashed changes
 		
+=======
+		myThicknessSlider.addChangeListener(new SliderAdjuster());
+
+>>>>>>> Stashed changes
 		myOptionsMenu.addSeparator();
 
 		// primary and secondary colors menu
@@ -312,8 +492,36 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 		myOptionsMenu.addSeparator();
 
+<<<<<<< Updated upstream
 		// adds the clear function
 		myOptionsMenu.add(new JMenuItem("Clear", KeyEvent.VK_C));
+=======
+		// clear button is disabled until a shape is drawn
+		myClearButton = new JMenuItem("Clear", KeyEvent.VK_C);
+		myClearButton.setEnabled(false);
+		myClearButton.addActionListener(new ClearHandler());
+
+		// adds the clear function
+		myOptionsMenu.add(myClearButton);
+		myOptionsMenu.addSeparator();
+
+		// undo option: Shorcut ctrl + z
+		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Y);
+		myUndoButton.setAccelerator(KeyStroke.getKeyStroke(
+                   KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		myUndoButton.setEnabled(false);
+		myUndoButton.addActionListener(new UndoAction());
+		myOptionsMenu.add(myUndoButton);
+
+		// redo option: Shortcut ctrl + y
+		myRedoButton = new JMenuItem("Redo", KeyEvent.VK_Y);
+        myRedoButton.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		myRedoButton.setEnabled(false);
+		myRedoButton.addActionListener(new RedoAction());
+		myOptionsMenu.add(myRedoButton);
+
+>>>>>>> Stashed changes
 		myOptionsMenu.addSeparator();
 
 		// extra option in case user wants to exit
@@ -322,6 +530,7 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		myOptionsMenu.add(exit);
 
 	}
+<<<<<<< Updated upstream
 	
 	public void setupThicknessSlider()
     {
@@ -361,6 +570,28 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 		mySecondaryButton = new JMenuItem("Secondary Color...",
 				myColorIcon2);
+=======
+
+	public void setupThicknessSlider() {
+		myThicknessSlider = new JSlider(THICKNESS_MIN, THICKNESS_MAX,
+				THICKNESS_INITIAL);
+		myThicknessSlider.setMajorTickSpacing(MAJOR_SPACING);
+		myThicknessSlider.setMinorTickSpacing(MINOR_SPACING);
+		myThicknessSlider.setPaintTicks(true);
+		myThicknessSlider.setPaintLabels(true);
+	}
+
+	/**
+	 * Setups the color buttons under the menu options
+	 * 
+	 */
+	public void setupColorButtons() {
+		myPrimaryButton = new JMenuItem("Primary Color...", myColorIcon);
+		myPrimaryButton.setMnemonic(KeyEvent.VK_P);
+		myOptionsMenu.add(myPrimaryButton);
+
+		mySecondaryButton = new JMenuItem("Secondary Color...", myColorIcon2);
+>>>>>>> Stashed changes
 		mySecondaryButton.setMnemonic(KeyEvent.VK_S);
 		myOptionsMenu.add(mySecondaryButton);
 
@@ -369,7 +600,10 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		mySecondaryButton.addActionListener(new ColorChoiceSecondary());
 	}
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	// class to open color swatch for primary color. After user chooses color,
 	// that color and icon is updated.
 	class ColorChoicePrimary implements ActionListener {
@@ -377,9 +611,15 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+<<<<<<< Updated upstream
 			//gets the color choice from user input
 			final Color colorChoice = JColorChooser.showDialog(null,
 					"Select a color", PURPLE);
+=======
+			// gets the color choice from user input
+			final Color colorChoice = JColorChooser.showDialog(null,
+					"Select a color", DEFAULT_PRIMARY);
+>>>>>>> Stashed changes
 
 			// update primary colors based on input
 			myColorIcon.setColor(colorChoice);
@@ -400,8 +640,12 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		public void actionPerformed(ActionEvent e) {
 
 			final Color colorChoice = JColorChooser.showDialog(null,
+<<<<<<< Updated upstream
 					"Select a color", GOLD);
 			
+=======
+					"Select a color", DEFAULT_SECONDARY);
+>>>>>>> Stashed changes
 
 			// update secondary colors based on input
 			myColorIcon2.setColor(colorChoice);
@@ -413,15 +657,23 @@ public class PowerPaintGUI implements PropertyChangeListener {
 
 	}
 
+<<<<<<< Updated upstream
     /**
      * Setups the menu tools dropdown with radio buttons
      * 
      */
+=======
+	/**
+	 * Setups the menu tools dropdown with radio buttons
+	 * 
+	 */
+>>>>>>> Stashed changes
 	public void setupMenuTools() {
 		myToolsMenu = new JMenu("Tools");
 		myToolsMenu.setMnemonic(KeyEvent.VK_T);
 		myMenuBar.add(myToolsMenu);
 
+<<<<<<< Updated upstream
 		// create the radio list for our tools
 		ButtonGroup group = new ButtonGroup();
 
@@ -556,6 +808,28 @@ public class PowerPaintGUI implements PropertyChangeListener {
      * Setups help menu 
      * 
      */
+=======
+		// associate tool buttons with actions and add to toolbar
+		for (final Action act : myToolActions) {
+			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
+
+			myToolMenuButtons.add(rb);
+			myToolsMenu.add(rb);
+
+			// selects the line tool at the start as default
+			if (rb.getAction() == myDefaultAction) {
+				rb.setSelected(true);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Setups help menu
+	 * 
+	 */
+>>>>>>> Stashed changes
 	public void setupMenuHelp() {
 		myHelpMenu = new JMenu("Help");
 		myHelpMenu.setMnemonic(KeyEvent.VK_H);
@@ -566,6 +840,66 @@ public class PowerPaintGUI implements PropertyChangeListener {
 		about.addActionListener(new PopOutAction());
 	}
 
+<<<<<<< Updated upstream
+=======
+	class ClearHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myClearButton.isEnabled()) {
+
+				myPanel.clearShapes(); // clear stored info on panel
+
+				myClearButton.setEnabled(false);
+
+			}
+
+		}
+
+	}
+
+	class UndoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myUndoButton.isEnabled()) {
+
+				myPanel.undo(); 
+
+			}
+
+		}
+
+	}
+
+	class RedoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myRedoButton.isEnabled()) {
+
+				myPanel.redo(); 
+
+			}
+
+		}
+
+	}
+	
+
+
+	private class SliderAdjuster implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			JSlider source = (JSlider) e.getSource();
+			if (!source.getValueIsAdjusting()) {
+				int changeValue = (int) source.getValue();
+				myPanel.setThickness(changeValue);
+			}
+		}
+	}
+
+>>>>>>> Stashed changes
 	class PopOutAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -581,12 +915,20 @@ public class PowerPaintGUI implements PropertyChangeListener {
 			// creates the pop up window when "about" is clicked with our custom
 			// title, message, and icon
 			JOptionPane.showMessageDialog(null,
+<<<<<<< Updated upstream
 					"Katlyn and Kenneth \nAutumn 2020 \nTCSS 305 Assignment 4",
+=======
+					"Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4",
+>>>>>>> Stashed changes
 					"About", JOptionPane.INFORMATION_MESSAGE, icon2);
 		}
 	}
 
+<<<<<<< Updated upstream
 	//listener for when exit is chosen
+=======
+	// listener for when exit is chosen
+>>>>>>> Stashed changes
 	class ExitAction implements ActionListener {
 
 		@Override
@@ -599,8 +941,22 @@ public class PowerPaintGUI implements PropertyChangeListener {
 	}
 
 	@Override
+<<<<<<< Updated upstream
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
+=======
+	public void propertyChange(PropertyChangeEvent theEvent) {
+		final boolean status = (Boolean) theEvent.getNewValue();
+		
+		if (PROPERTY_SHAPE_HAS_SHAPE.equals(theEvent.getPropertyName())) {
+			myClearButton.setEnabled(status);
+			myUndoButton.setEnabled(status);
+		}
+		
+		if (PROPERTY_SHAPE_REDO.equals(theEvent.getPropertyName())) {
+			myRedoButton.setEnabled(status);
+		} 
+>>>>>>> Stashed changes
 
 	}
 }

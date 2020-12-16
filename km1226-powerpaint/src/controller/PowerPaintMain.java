@@ -12,6 +12,16 @@ import view.PaintPanel;
 import view.PowerPaintGUI;
 
 
+<<<<<<< Updated upstream
+=======
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+>>>>>>> Stashed changes
 public class PowerPaintMain {
 
     /**

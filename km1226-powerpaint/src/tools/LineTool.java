@@ -5,6 +5,7 @@ import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
 
+<<<<<<< Updated upstream
 public class LineTool extends AbstractPaintTool {
 
 <<<<<<< Updated upstream
@@ -25,6 +26,17 @@ public class LineTool extends AbstractPaintTool {
 	}
 	
 =======
+=======
+/**
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+public class LineTool extends AbstractPaintTool {
+
+>>>>>>> Stashed changes
 	private static final String NAME = "Line";
 
 	private static final int MNEMONIC = KeyEvent.VK_L;
@@ -42,6 +54,9 @@ public class LineTool extends AbstractPaintTool {
 				myNextPoint.x, myNextPoint.y);
 	}
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	@Override
 	public void setStartPoint(Point thePoint) {
@@ -49,7 +64,11 @@ public class LineTool extends AbstractPaintTool {
 		myNextPoint = thePoint;
 	}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -64,11 +83,19 @@ public class LineTool extends AbstractPaintTool {
 		myNextPoint = NO_POINT;
 	}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	
 	
 	
 	
 =======
+
+>>>>>>> Stashed changes
+=======
+	
+	public String getName() {
+		return NAME;
+	}
 
 >>>>>>> Stashed changes
 }
