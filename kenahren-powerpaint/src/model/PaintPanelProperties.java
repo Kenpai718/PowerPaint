@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Color;
 
+import tools.LineTool;
+
 /**
  * Defines properties that a PropertyChangeListener will be notifying for. Also
  * provides constants such as the default primary and secondary color for all

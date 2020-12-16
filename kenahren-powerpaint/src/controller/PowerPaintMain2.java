@@ -19,12 +19,12 @@ import view.PowerPaintGUI;
  * @version Fall 2020
  */
 
-public class PowerPaintMain {
+public class PowerPaintMain2 {
 
     /**
      * Private constructor to prevent external instantiation.
      */
-    private PowerPaintMain() {
+    private PowerPaintMain2() {
         throw new IllegalStateException();
     }
 

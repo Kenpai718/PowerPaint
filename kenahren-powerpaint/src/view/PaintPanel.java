@@ -267,8 +267,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	private void updateGUI() {
 
 		// update gui on the status of the panel if it has shapes drawn to it
-		firePropertyChange(PROPERTY_HAS_SHAPE, null,
-				!myShapesStack.isEmpty());
+		firePropertyChange(PROPERTY_HAS_SHAPE, null,!myShapesStack.isEmpty());
 
 		// update gui on the status of the redo stack
 		firePropertyChange(PROPERTY_SHAPE_REDO, null, !myRedoStack.isEmpty());
@@ -289,12 +288,10 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				}
 				else
 				{
-					//left click = primary color
 					if (theEvent.getButton() == 1)
 					{
 						myCurrentColor = myPrimaryColor;
 					}
-					//right click or anything else is secondary
 					else
 					{
 						myCurrentColor = mySecondaryColor;
