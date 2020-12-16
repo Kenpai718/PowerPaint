@@ -12,33 +12,15 @@ import java.awt.geom.Path2D;
  * @version Fall 2020
  */
 
-public class EraserTool extends AbstractPaintTool {
+public class EraserTool extends PencilTool {
 
-	private static final String NAME = "Line";
+	private static final String NAME = "Eraser";
 
 	private static final int MNEMONIC = KeyEvent.VK_A;
-	private Point myNextPoint;
 
-	private Path2D myEraser;
-
-	// note to self: this probably extends pencil
+	
 	public EraserTool() {
 		super(NAME, MNEMONIC);
-		myNextPoint = NO_POINT;
-		myEraser = new Path2D.Double();
-	}
-
-	@Override
-	public Shape getShape() {
-		// TODO
-		// return the shape that it is hovering over but cover it in white bg
-		return myEraser;
-	}
-
-	@Override
-	public void setNextPoint(Point thePoint) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

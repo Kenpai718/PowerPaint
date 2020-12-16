@@ -20,31 +20,41 @@ public class PencilTool extends AbstractPaintTool {
 	
 	private Point myNextPoint;
 	
-	private Path2D myPen;
+	private Path2D.Double myPencil;
 	
 	
 	public PencilTool() {
 		super(NAME, MNEMONIC);
 		myNextPoint = NO_POINT;
-		myPen = new Path2D.Double();
+		myPencil = new Path2D.Double();
+	}
+	
+	public PencilTool(String theName, int theMnemonic) {
+		super(theName, theMnemonic);
+		myNextPoint = NO_POINT;
+		myPencil = new Path2D.Double();
 	}
 
 	@Override
 	public Shape getShape() {
-		
-		return myPen;
-		
+		return myPencil;
+	}
+	
+	 @Override
+	public void setStartPoint(final Point thePoint) {
+	    super.setStartPoint(thePoint);
+	    myPencil.moveTo(thePoint.getX(),  thePoint.getY()); 
 	}
 
 	@Override
 	public void setNextPoint(Point thePoint) {
-		// TODO Auto-generated method stub
-
+		 myPencil.lineTo(thePoint.getX(), thePoint.getY());
 	}
 	
 	@Override
 	public void reset() {
 		super.reset();
+		myPencil = new Path2D.Double();
 		myNextPoint = NO_POINT;
 	}
 

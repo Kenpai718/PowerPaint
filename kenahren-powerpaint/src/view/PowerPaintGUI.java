@@ -197,8 +197,6 @@ public class PowerPaintGUI
 		//listeners
 		// listen for changes that happen in this paintpanel
 		myPanel.addPropertyChangeListener(this);
-		// listen for right or left click on the panel
-		myPanel.addMouseListener(new ClickListener());
 
 	}
 
@@ -446,25 +444,7 @@ public class PowerPaintGUI
 
 	}
 	
-	class ClickListener extends MouseInputAdapter{
-		
-		int leftClick = MouseEvent.BUTTON1;
-		int rightClick = MouseEvent.BUTTON3;
 
-		@Override
-		public void mousePressed(MouseEvent theEvent) {
-			if(theEvent.getButton() == leftClick) {
-				myPanel.setColor(myColorIcon.getColor());
-			} else if(theEvent.getButton() == rightClick) {
-				myPanel.setColor(myColorIcon2.getColor());
-			}
-			
-		}
-		
-		
-
-
-	}
 
 	private class SliderAdjuster implements ChangeListener {
 		@Override
@@ -513,7 +493,7 @@ public class PowerPaintGUI
 	public void propertyChange(PropertyChangeEvent theEvent) {
 		final boolean status = (Boolean) theEvent.getNewValue();
 		
-		if (PROPERTY_SHAPE_HAS_SHAPE.equals(theEvent.getPropertyName())) {
+		if (PROPERTY_HAS_SHAPE.equals(theEvent.getPropertyName())) {
 			myClearButton.setEnabled(status);
 			myUndoButton.setEnabled(status);
 		}

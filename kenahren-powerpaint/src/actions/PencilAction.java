@@ -1,7 +1,5 @@
 package actions;
 
-
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
@@ -28,16 +26,12 @@ public class PencilAction extends AbstractAction{
 	public static final String NAME = "Pencil";
     public static final ImageIcon ICON = new ImageIcon("./images/pencil_bw.gif");
     
-	
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
     private final PaintTool myTool;
-    
 	
-	
-	
-	   /**
+	 /**
      * Construct an Action of the pencil tool.
      * 
      * @param thePanel a JPanel to associate with this Action.
@@ -52,7 +46,6 @@ public class PencilAction extends AbstractAction{
         putValue(Action.SELECTED_KEY, true);
         putValue(Action.SHORT_DESCRIPTION, "A Pencil");
        
-
     }
     
     @Override

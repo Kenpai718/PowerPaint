@@ -15,14 +15,19 @@ import java.awt.geom.Line2D;
 
 public class EllipseTool extends AbstractPaintTool {
 
-	private static final String MY_NAME = "Ellipse";
+	private static final String NAME = "Ellipse";
 
-	private static final int MY_MNEMONIC = KeyEvent.VK_E;
+	private static final int MNEMONIC = KeyEvent.VK_E;
 
 	private Point myNextPoint;
 
 	public EllipseTool() {
-		super(MY_NAME, MY_MNEMONIC);
+		super(NAME, MNEMONIC);
+		myNextPoint = NO_POINT;
+	}
+	
+	public EllipseTool(String theName, int theMnemonic) {
+		super(theName, theMnemonic);
 		myNextPoint = NO_POINT;
 	}
 

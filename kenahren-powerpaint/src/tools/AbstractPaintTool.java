@@ -27,13 +27,11 @@ public abstract class AbstractPaintTool implements PaintTool {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return myName;
 	}
 
 	@Override
 	public int getMnemonic() {
-		// TODO Auto-generated method stub
 		return myMnemonic;
 	}
 

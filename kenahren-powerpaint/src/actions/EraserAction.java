@@ -23,13 +23,12 @@ public class EraserAction extends AbstractAction {
 
 	// constants
 	public static final String NAME = "Eraser";
-	public static final ImageIcon ICON = new ImageIcon(
-			"./images/eraser_bw.gif");
+	public static final ImageIcon ICON = new ImageIcon("./images/eraser_bw.gif");
 
 	/** The JPanel to associate with this Action. */
 	private final PaintPanel myPanel;
 
-	private PaintTool myTool;
+	private final PaintTool myTool;
 
 	/**
 	 * Construct an Action of the Line tool.

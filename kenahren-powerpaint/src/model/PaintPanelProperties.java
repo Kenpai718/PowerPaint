@@ -19,7 +19,7 @@ public interface PaintPanelProperties {
 	 * Property for a change listener for when there is a shape on the panel.
 	 * Tell GUI to reenable or disable the clear/undo button.
 	 */
-	final String PROPERTY_SHAPE_HAS_SHAPE = "There is shape(s) on PaintPanel";
+	final String PROPERTY_HAS_SHAPE = "There is shape(s) on PaintPanel";
 	
 	/**
 	 * Property to tell GUI an undone shape has been readded.

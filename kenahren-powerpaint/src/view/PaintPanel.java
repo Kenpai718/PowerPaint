@@ -26,6 +26,7 @@ import javax.swing.plaf.basic.BasicDesktopIconUI.MouseInputHandler;
 import model.PaintShape;
 import model.PaintPanelProperties;
 import tools.AbstractPaintTool;
+import tools.EraserTool;
 import tools.LineTool;
 import tools.PaintTool;
 import tools.PencilTool;
@@ -61,8 +62,10 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	/** Current shape on panel */
 	private Shape myCurrentShape;
 
+	private Color myCurrentColor;
+	
 	/** Current primary color */
-	private Color myColor;
+	private Color myPrimaryColor;
 
 	/** Current secondary color */
 	private Color mySecondaryColor;
@@ -98,7 +101,8 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		super();
 
 		// initialize some of the base fields
-		myColor = DEFAULT_PRIMARY;
+		myPrimaryColor = DEFAULT_PRIMARY;
+		mySecondaryColor = DEFAULT_SECONDARY;
 		myThickness = DEFAULT_THICKNESS;
 		myClearStatus = false;
 		myDragStatus = false;
@@ -151,15 +155,6 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		// send a property change to PowerPaintGUI
 		updateGUI();
 
-		// draw a shape with the current tool only when the mouse is being
-		// dragged. This is to provide visual feedback as the user draws the
-		// shape.
-		if (myDragStatus) {
-			g2d.setStroke(new BasicStroke(myThickness));
-			g2d.setPaint(myColor);
-			g2d.draw(myCurrentTool.getShape());
-		}
-
 		// draw all shapes currently on the list to the panel
 		if (!myShapesStack.isEmpty()) {
 			for (final PaintShape ps : myShapesStack) {
@@ -167,6 +162,15 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				g2d.setPaint(ps.getColor());
 				g2d.draw(ps.getShape());
 			}
+		}
+		
+		// draw a shape with the current tool only when the mouse is being
+		// dragged. This is to provide visual feedback as the user draws the
+		// shape.
+		if (myDragStatus) {
+			g2d.setStroke(new BasicStroke(myThickness));
+			g2d.setPaint(myCurrentColor);
+			g2d.draw(myCurrentTool.getShape());
 		}
 
 	}
@@ -177,7 +181,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * @param Color the color to change to
 	 */
 	public void setColor(Color theColor) {
-		myColor = theColor;
+		myPrimaryColor = theColor;
 	}
 
 	/**
@@ -213,7 +217,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * @param Shape shape to be saved
 	 */
 	public void saveShape(final Shape theShape) {
-		PaintShape ps = new PaintShape(theShape, myColor, myThickness);
+		PaintShape ps = new PaintShape(theShape, myCurrentColor, myThickness);
 		myShapesStack.push(ps);
 	}
 
@@ -263,7 +267,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	private void updateGUI() {
 
 		// update gui on the status of the panel if it has shapes drawn to it
-		firePropertyChange(PROPERTY_SHAPE_HAS_SHAPE, null,
+		firePropertyChange(PROPERTY_HAS_SHAPE, null,
 				!myShapesStack.isEmpty());
 
 		// update gui on the status of the redo stack
@@ -279,6 +283,23 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		public void mousePressed(final MouseEvent theEvent) {
 			
 			if (myThickness > 0) {
+				if(myCurrentTool instanceof EraserTool)
+				{
+					myCurrentColor = Color.white;
+				}
+				else
+				{
+					//left click = primary color
+					if (theEvent.getButton() == 1)
+					{
+						myCurrentColor = myPrimaryColor;
+					}
+					//right click or anything else is secondary
+					else
+					{
+						myCurrentColor = mySecondaryColor;
+					}
+				}
 				myStartPoint = theEvent.getPoint();
 				myNextPoint = myStartPoint;
 
@@ -288,6 +309,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				myCurrentShape = myCurrentTool.getShape();
 
 				repaint();
+
 			}
 		}
 
@@ -314,6 +336,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				myDragStatus = false;
 
 				saveShape(myCurrentShape);
+				myCurrentTool.reset();
 				repaint();
 			}
 		}

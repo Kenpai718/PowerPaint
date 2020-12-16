@@ -24,6 +24,11 @@ public class LineTool extends AbstractPaintTool {
 		super(NAME, MNEMONIC);
 		myNextPoint = NO_POINT;
 	}
+	
+	public LineTool(String theName, int theMnemonic) {
+		super(theName, theMnemonic);
+		myNextPoint = NO_POINT;
+	}
 
 	@Override
 	public Shape getShape() {

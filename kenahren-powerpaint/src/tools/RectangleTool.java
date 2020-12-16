@@ -25,6 +25,11 @@ public class RectangleTool extends AbstractPaintTool {
 		super(MY_NAME, MY_MNEMONIC);
 		myNextPoint = NO_POINT;
 	}
+	
+	public RectangleTool(String theName, int theMnemonic) {
+		super(theName, theMnemonic);
+		myNextPoint = NO_POINT;
+	}
 
 	@Override
 	public Shape getShape() {
