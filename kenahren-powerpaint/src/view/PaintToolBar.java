@@ -1,5 +1,6 @@
 package view;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,9 @@ import actions.LineAction;
 import actions.PencilAction;
 import actions.RectangleAction;
 
-public class PaintToolBar extends JToolBar
-{
+public class PaintToolBar extends JToolBar {
 	private final PaintPanel myPaintPanel;
-	
+
 	/** A button group for tool actions in toolbar */
 	private ButtonGroup myToolBarButtons;
 
@@ -30,9 +30,9 @@ public class PaintToolBar extends JToolBar
 
 	/** Sets default tool action */
 	private Action myDefaultAction;
-	
-	public PaintToolBar(JFrame theFrame, PaintPanel thePanel, ArrayList<Action> theToolActions, Action theAction)
-	{
+
+	public PaintToolBar(JFrame theFrame, PaintPanel thePanel,
+			ArrayList<Action> theToolActions, Action theAction) {
 		super();
 		myPaintPanel = thePanel;
 		myToolBar = new JToolBar();
@@ -41,12 +41,10 @@ public class PaintToolBar extends JToolBar
 
 		// initialize tool actions for buttons
 		myDefaultAction = theAction;
-		
+
 		setupToolBarActions();
 	}
-	
-	
-	
+
 	public void setupToolBarActions() {
 
 		// associate tool buttons with actions and add to toolbar
@@ -63,7 +61,7 @@ public class PaintToolBar extends JToolBar
 		}
 
 	}
-	
+
 	public JToolBar getPaintToolBar() {
 		return myToolBar;
 	}

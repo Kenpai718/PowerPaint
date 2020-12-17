@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -38,9 +39,14 @@ import tools.PencilTool;
  * @version Fall 2020
  */
 
-public class PaintPanel extends JPanel implements PaintPanelProperties {
+public class PaintPanel extends JPanel implements PaintPanelProperties, Serializable{
 
 	// constants
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9190391605769957067L;
 
 	/** The default size of the drawing panel. */
 	private static final Dimension PANEL_DEFAULT_SIZE = new Dimension(500, 300);
@@ -255,6 +261,31 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 		}
 
+	}
+	
+	/**
+	 * Returns all shapes currently drawn
+	 * 
+	 * @return Shape stack of all currently drawn shapes
+	 */
+	public Stack<PaintShape> getShapesList() {
+		Stack<PaintShape> copy = (Stack<PaintShape>) myShapesStack.clone();
+		return copy;
+		
+	}
+	
+	/**
+	 * Clears panel and redraws shapes with a new stack of shapes
+	 * 
+	 * @param Shape shapes to be loaded to panel
+	 */
+	public void loadShapes(Stack<PaintShape> theShapes) {
+		clearShapes();
+		myShapesStack.addAll(theShapes);
+		
+		//draw new shapes
+		repaint();
+		
 	}
 	
 

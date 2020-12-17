@@ -9,12 +9,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -37,6 +47,7 @@ import actions.LineAction;
 import actions.PencilAction;
 import actions.RectangleAction;
 import model.PaintPanelProperties;
+import model.PaintShape;
 
 public class PaintMenuBar extends JMenuBar
 		implements PropertyChangeListener, PaintPanelProperties {
@@ -66,9 +77,16 @@ public class PaintMenuBar extends JMenuBar
 	/** Secondary color icon */
 	private final ColorIcon myColorIcon2;
 
+	/** PaintPanel that is drawn on */
 	private final PaintPanel myPaintPanel;
+
+	/** Frame that everything is attached too */
 	private final JFrame myFrame;
+
+	/** Menubar that contains all dropdowns */
 	private JMenuBar myMenuBar;
+
+	/** Tools drop down menu */
 	private JMenu myToolsMenu;
 
 	/** A button group for tool actions in tool menu */
@@ -110,8 +128,16 @@ public class PaintMenuBar extends JMenuBar
 	/** Sets default tool action */
 	private Action myDefaultAction;
 
+	/**
+	 * PaintMenuBar constructor
+	 * 
+	 * @param theFrame         is the frame the menu bar is attached to
+	 * @param thePanel         is the drawing panel
+	 * @param theToolActions   is the list of tool actions to assign to buttons
+	 * @param theDefaultAction is the list of tool actions to assign to button
+	 */
 	public PaintMenuBar(JFrame theFrame, PaintPanel thePanel,
-			ArrayList<Action> theToolActions, Action theAction) {
+			ArrayList<Action> theToolActions, Action theDefaultAction) {
 		super();
 		myPaintPanel = thePanel;
 		myFrame = theFrame;
@@ -119,26 +145,211 @@ public class PaintMenuBar extends JMenuBar
 		myColorIcon = new ColorIcon(DEFAULT_PRIMARY);
 		myColorIcon2 = new ColorIcon(DEFAULT_SECONDARY);
 
-		myDefaultAction = theAction;
+		myDefaultAction = theDefaultAction;
 		myToolActions = theToolActions;
 
 		myPaintPanel.addPropertyChangeListener(this);
 
-		setupMenu();
+		setupMenuBar();
 	}
 
+	/**
+	 * Getter for the menubar
+	 *
+	 * @return JMenuBar the finished menubar
+	 */
 	public JMenuBar getMenuBar() {
 		return myMenuBar;
 	}
 
-	public void setupMenu() {
+	/**
+	 * Sets up the menubar with all dropdowns
+	 */
+	public void setupMenuBar() {
 		myMenuBar = new JMenuBar();
 
 		// helper methods to condense code
-
+		setupMenuFile();
 		setupMenuOptions();
 		setupMenuTools();
 		setupMenuHelp();
+
+	}
+
+	public void setupMenuFile() {
+		myFileMenu = new JMenu("File");
+		myFileMenu.setMnemonic(KeyEvent.VK_F);
+		myMenuBar.add(myFileMenu);
+
+		JMenuItem newMenuItem = new JMenuItem("New");
+		newMenuItem.setMnemonic(KeyEvent.VK_N);
+		myFileMenu.add(newMenuItem);
+		newMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// clears panel to make a new one
+				myPaintPanel.clearShapes();
+
+			}
+
+		});
+
+		myFileMenu.addSeparator();
+
+		JMenuItem save = new JMenuItem("Save");
+		save.setMnemonic(KeyEvent.VK_S);
+		save.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		myFileMenu.add(save);
+
+		// save the current drawings if this button is clicked
+		save.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					saveToFile(myFrame);
+				} catch (IOException e1) {
+
+					e1.printStackTrace();
+				}
+
+			}
+
+		});
+
+		myFileMenu.addSeparator();
+
+		JMenuItem load = new JMenuItem("Load");
+		load.setMnemonic(KeyEvent.VK_L);
+		load.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+		myFileMenu.add(load);
+
+		// load a drawing from file if this button is clicked
+		load.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadFromFile(myFrame);
+
+			}
+
+		});
+
+		myFileMenu.addSeparator();
+
+		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_E);
+		exit.addActionListener(new ExitAction());
+		myFileMenu.add(exit);
+
+	}
+
+	public void saveToFile(Frame theFrame)
+			throws FileNotFoundException, IOException {
+
+		FileDialog fd; // A file dialog box that will let the user
+						// specify the output file.
+
+		// start file dialog to prompt user for file name/location to save to
+		fd = new FileDialog(theFrame, "Save to File", FileDialog.SAVE);
+		fd.show();
+
+		String fileName = fd.getFile(); // gets what the user input for file
+										// name
+
+		// if user closes without entering a name
+		if (fileName == null) {
+			JOptionPane.showMessageDialog(null, "Save was canceled.");
+			return;
+		} else {
+
+			// add a file extention if user did not do so
+			if (!fileName.endsWith(".shp"))
+				fileName += ".shp";
+
+			String directoryName = fd.getDirectory();
+
+			// make the file
+			File file = new File(directoryName, fileName);
+
+			//write object to a file
+			ObjectOutputStream out;
+
+			try {
+				// write info the file
+				out = new ObjectOutputStream(
+						new BufferedOutputStream(new FileOutputStream(file)));
+
+				// get the current list of shapes from the panel
+				Stack<PaintShape> shapesList = myPaintPanel.getShapesList();
+
+				// save the serialized object to the file
+				out.writeObject(shapesList);
+				out.close();
+
+				// tell user it worked
+				JOptionPane.showMessageDialog(null,
+						fileName + " saved sucessfully!");
+				
+			//error catching
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, e);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+		}
+
+	}
+
+	public void loadFromFile(Frame theFrame) {
+
+		FileDialog fd; // A file dialog box that will let the user
+		// specify the input file.
+
+		// start file dialog to prompt user for file name/location to load from
+		fd = new FileDialog(theFrame, "Save to File", FileDialog.LOAD);
+		fd.show();
+
+		String fileName = fd.getFile();
+
+		// cancel load if user doesnt input anything
+		if (fileName == null) {
+			JOptionPane.showMessageDialog(null, "Load was canceled.");
+			return;
+		} else {
+
+			String directoryName = fd.getDirectory();
+
+			File file = new File(directoryName, fileName);
+
+			ObjectInputStream in;
+
+			try {
+				in = new ObjectInputStream(
+						new BufferedInputStream(new FileInputStream(file)));
+
+				//get the paintshape data from the input file
+				Object obj = in.readObject();
+				Stack<PaintShape> shapeData = (Stack<PaintShape>) obj;
+				
+				//send the loaded shapes to panel to redraw
+				myPaintPanel.loadShapes(shapeData);
+
+				//tell user it worked
+				JOptionPane.showMessageDialog(null,
+						fileName + " loaded successfully!");
+				
+			//error catching below
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, e);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, e);
+			} catch (ClassNotFoundException e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+		}
 
 	}
 
@@ -186,13 +397,6 @@ public class PaintMenuBar extends JMenuBar
 		myRedoButton.setEnabled(false);
 		myRedoButton.addActionListener(new RedoAction());
 		myOptionsMenu.add(myRedoButton);
-
-		myOptionsMenu.addSeparator();
-
-		// extra option in case user wants to exit
-		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_E);
-		exit.addActionListener(new ExitAction());
-		myOptionsMenu.add(exit);
 
 	}
 

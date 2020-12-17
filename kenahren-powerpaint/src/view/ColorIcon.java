@@ -3,6 +3,7 @@ package view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import javax.swing.Icon;
 
@@ -13,7 +14,7 @@ import javax.swing.Icon;
  * @version Fall 2020
  */
 
-public class ColorIcon implements Icon {
+public class ColorIcon implements Icon{
 	
     /** The color of the icon. */
     private Color myColor;

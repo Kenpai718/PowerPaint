@@ -2,15 +2,22 @@ package model;
 
 import java.awt.Color;
 import java.awt.Shape;
+import java.io.Serializable;
 
 /**
+ * Stores info about a paintshape
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
  * @version Fall 2020
  */
 
-public class PaintShape {
+public class PaintShape implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6364720977971513243L;
 
 	/** The shape to be painted */
 	private final Shape myShape;
