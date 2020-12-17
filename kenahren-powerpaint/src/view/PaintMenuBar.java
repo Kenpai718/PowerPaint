@@ -25,17 +25,18 @@ import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import actions.EllipseAction;
 import actions.EraserAction;
 import actions.LineAction;
 import actions.PencilAction;
 import actions.RectangleAction;
-import model.PaintPanelProperties;
+import model.UWColors;
 
-public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, PaintPanelProperties
-{
-	
+public class PaintMenuBar extends JMenuBar implements UWColors {
+
 	// constants
 
 	/** Slider minimum value. */
@@ -57,12 +58,12 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 
 	/** Secondary color icon */
 	private final ColorIcon myColorIcon2;
-		
+
 	private final PaintPanel myPaintPanel;
 	private final JFrame myFrame;
 	private JMenuBar myMenuBar;
 	private JMenu myToolsMenu;
-	
+
 	/** A button group for tool actions in tool menu */
 	private ButtonGroup myToolMenuButtons;
 
@@ -77,7 +78,7 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 
 	/** The image icon to show in the window title and about window. */
 	private ImageIcon myImageIcon = new ImageIcon("./images/w.gif");
-	
+
 	/** Primary color menu button in options menu */
 	private JMenuItem myPrimaryButton;
 
@@ -95,32 +96,30 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 
 	/** Clear button in options. */
 	private JMenuItem myRedoButton;
-	
+
 	/** Sets default tool action */
 	private Action myDefaultAction;
-	
-	public PaintMenuBar(JFrame theFrame, PaintPanel thePanel, ArrayList<Action> theToolActions, Action theAction)
-	{
+
+	public PaintMenuBar(JFrame theFrame, PaintPanel thePanel,
+			ArrayList<Action> theToolActions, Action theAction) {
 		super();
 		myPaintPanel = thePanel;
 		myFrame = theFrame;
 		myToolMenuButtons = new ButtonGroup();
 		myColorIcon = new ColorIcon(DEFAULT_PRIMARY);
 		myColorIcon2 = new ColorIcon(DEFAULT_SECONDARY);
-		
+
 		myDefaultAction = theAction;
 		myToolActions = theToolActions;
 
-		
-		addPropertyChangeListener(this);
-		
 		setupMenu();
+
 	}
-	
+
 	public JMenuBar getMenuBar() {
 		return myMenuBar;
 	}
-	
+
 	public void setupMenu() {
 		myMenuBar = new JMenuBar();
 
@@ -130,7 +129,7 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 		setupMenuHelp();
 
 	}
-	
+
 	public void setupMenuOptions() {
 		myOptionsMenu = new JMenu("Options");
 		myOptionsMenu.setMnemonic(KeyEvent.VK_O);
@@ -161,17 +160,17 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 		myOptionsMenu.addSeparator();
 
 		// undo option: Shorcut ctrl + z
-		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Y);
-		myUndoButton.setAccelerator(KeyStroke.getKeyStroke(
-                   KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Z);
+		myUndoButton.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 		myUndoButton.setEnabled(false);
 		myUndoButton.addActionListener(new UndoAction());
 		myOptionsMenu.add(myUndoButton);
 
 		// redo option: Shortcut ctrl + y
 		myRedoButton = new JMenuItem("Redo", KeyEvent.VK_Y);
-        myRedoButton.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		myRedoButton.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		myRedoButton.setEnabled(false);
 		myRedoButton.addActionListener(new RedoAction());
 		myOptionsMenu.add(myRedoButton);
@@ -183,6 +182,9 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 		exit.addActionListener(new ExitAction());
 		myOptionsMenu.add(exit);
 
+		// enable/disable certain buttons depending on situation
+		myOptionsMenu.addMenuListener(new OptionsListener());
+
 	}
 
 	public void setupThicknessSlider() {
@@ -193,7 +195,7 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 		myThicknessSlider.setPaintTicks(true);
 		myThicknessSlider.setPaintLabels(true);
 	}
-	
+
 	public void setupColorButtons() {
 		myPrimaryButton = new JMenuItem("Primary Color...", myColorIcon);
 		myPrimaryButton.setMnemonic(KeyEvent.VK_P);
@@ -207,182 +209,201 @@ public class PaintMenuBar extends JMenuBar implements PropertyChangeListener, Pa
 		myPrimaryButton.addActionListener(new ColorChoicePrimary());
 		mySecondaryButton.addActionListener(new ColorChoiceSecondary());
 	}
-	
+
 	// class to open color swatch for primary color. After user chooses color,
-		// that color and icon is updated.
-		class ColorChoicePrimary implements ActionListener {
+	// that color and icon is updated.
+	class ColorChoicePrimary implements ActionListener {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		@Override
+		public void actionPerformed(ActionEvent e) {
 
-				// gets the color choice from user input
-				final Color colorChoice = JColorChooser.showDialog(null,
-						"Select a color", DEFAULT_PRIMARY);
+			// gets the color choice from user input
+			final Color colorChoice = JColorChooser.showDialog(null,
+					"Select a color", DEFAULT_PRIMARY);
 
-				// update primary colors based on input
-				myColorIcon.setColor(colorChoice);
+			// update primary colors based on input
+			myColorIcon.setColor(colorChoice);
 
-				// set the color for the jpanel tool
-				if (colorChoice != null) {
-					myPaintPanel.setColor(colorChoice);
-				}
+			// set the color for the jpanel tool
+			if (colorChoice != null) {
+				myPaintPanel.setColor(colorChoice);
+			}
+		}
+
+	}
+
+	// class to open color swatch for secondary color. After user chooses color,
+	// that color and icon is updated.
+	class ColorChoiceSecondary implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			final Color colorChoice = JColorChooser.showDialog(null,
+					"Select a color", DEFAULT_SECONDARY);
+
+			// update secondary colors based on input
+			myColorIcon2.setColor(colorChoice);
+
+			if (colorChoice != null) {
+				myPaintPanel.setSecondaryColor(colorChoice);
+			}
+		}
+
+	}
+
+	/**
+	 * Setups the menu tools dropdown with radio buttons
+	 * 
+	 */
+	public void setupMenuTools() {
+		myToolsMenu = new JMenu("Tools");
+		myToolsMenu.setMnemonic(KeyEvent.VK_T);
+		myMenuBar.add(myToolsMenu);
+
+		// associate tool buttons with actions and add to toolbar
+		for (final Action act : myToolActions) {
+			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
+
+			myToolMenuButtons.add(rb);
+			myToolsMenu.add(rb);
+
+			// selects the line tool at the start as default
+			if (rb.getAction() == myDefaultAction) {
+				rb.setSelected(true);
 			}
 
 		}
 
-		// class to open color swatch for secondary color. After user chooses color,
-		// that color and icon is updated.
-		class ColorChoiceSecondary implements ActionListener {
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+	/**
+	 * Setups help menu
+	 * 
+	 */
+	public void setupMenuHelp() {
+		myHelpMenu = new JMenu("Help");
+		myHelpMenu.setMnemonic(KeyEvent.VK_H);
+		myMenuBar.add(myHelpMenu);
 
-				final Color colorChoice = JColorChooser.showDialog(null,
-						"Select a color", DEFAULT_SECONDARY);
+		JMenuItem about = new JMenuItem("About...", KeyEvent.VK_A);
+		myHelpMenu.add(about);
+		about.addActionListener(new PopOutAction());
+	}
 
-				// update secondary colors based on input
-				myColorIcon2.setColor(colorChoice);
+	class OptionsListener implements MenuListener {
 
-				if (colorChoice != null) {
-					myPaintPanel.setSecondaryColor(colorChoice);
-				}
+		@Override
+		public void menuSelected(MenuEvent theEvent) {
+
+			// enable clear,undo, redo when the panel is not empty
+			if (myPaintPanel.isEmptyPanel()) {
+				myClearButton.setEnabled(false);
+				myUndoButton.setEnabled(false);
+				myRedoButton.setEnabled(false);
+			} else {
+				myClearButton.setEnabled(true);
+				myUndoButton.setEnabled(true);
 			}
 
-		}
-
-		/**
-		 * Setups the menu tools dropdown with radio buttons
-		 * 
-		 */
-		public void setupMenuTools() {
-			myToolsMenu = new JMenu("Tools");
-			myToolsMenu.setMnemonic(KeyEvent.VK_T);
-			myMenuBar.add(myToolsMenu);
-
-			// associate tool buttons with actions and add to toolbar
-			for (final Action act : myToolActions) {
-				JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
-
-				myToolMenuButtons.add(rb);
-				myToolsMenu.add(rb);
-
-				// selects the line tool at the start as default
-				if (rb.getAction() == myDefaultAction) {
-					rb.setSelected(true);
-				}
-
-			}
-
-		}
-		
-		/**
-		 * Setups help menu
-		 * 
-		 */
-		public void setupMenuHelp() {
-			myHelpMenu = new JMenu("Help");
-			myHelpMenu.setMnemonic(KeyEvent.VK_H);
-			myMenuBar.add(myHelpMenu);
-
-			JMenuItem about = new JMenuItem("About...", KeyEvent.VK_A);
-			myHelpMenu.add(about);
-			about.addActionListener(new PopOutAction());
-		}
-
-		class ClearHandler implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (myClearButton.isEnabled()) {
-
-					myPaintPanel.clearShapes(); // clear stored info on panel
-
-					myClearButton.setEnabled(false);
-
-				}
-
-			}
-
-		}
-
-		class UndoAction implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (myUndoButton.isEnabled()) {
-					myPaintPanel.undo(); 
-				}
-			}
-		}
-
-		class RedoAction implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (myRedoButton.isEnabled()) {
-
-					myPaintPanel.redo(); 
-				}
-			}
-		}
-		
-
-
-		private class SliderAdjuster implements ChangeListener {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSlider source = (JSlider) e.getSource();
-				if (!source.getValueIsAdjusting()) {
-					int changeValue = (int) source.getValue();
-					myPaintPanel.setThickness(changeValue);
-				}
-			}
-		}
-
-		class PopOutAction implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// gets the image we want to use for our icon
-				final ImageIcon icon = myImageIcon;
-				// takes the image from the icon
-				Image imgIcon = icon.getImage();
-				// scales the image down
-				Image newImgIcon = imgIcon.getScaledInstance(50, 35,
-						java.awt.Image.SCALE_SMOOTH);
-				// takes our scaled image and makes it into an icon
-				final ImageIcon icon2 = new ImageIcon(newImgIcon);
-				// creates the pop up window when "about" is clicked with our custom
-				// title, message, and icon
-				JOptionPane.showMessageDialog(null,
-						"Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4",
-						"About", JOptionPane.INFORMATION_MESSAGE, icon2);
-			}
-		}
-
-		// listener for when exit is chosen
-		class ExitAction implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				myFrame.dispose();
-				System.exit(0);
-
+			// enable redo when there are shapes that were undone
+			if (myPaintPanel.canRedo()) {
+				myRedoButton.setEnabled(true);
+			} else {
+				myRedoButton.setEnabled(false);
 			}
 
 		}
 
 		@Override
-		public void propertyChange(PropertyChangeEvent theEvent) {
-			final boolean status =  (boolean) theEvent.getNewValue();
-			
-			if (PROPERTY_HAS_SHAPE.equals(theEvent.getPropertyName())) {
-				myClearButton.setEnabled(status);
-				myUndoButton.setEnabled(status);
-			}
-			
-			if (PROPERTY_SHAPE_REDO.equals(theEvent.getPropertyName())) {
-				myRedoButton.setEnabled(status);
-			} 
+		public void menuDeselected(MenuEvent theEvent) {
+			//menuSelected(theEvent);
 
 		}
+
+		@Override
+		public void menuCanceled(MenuEvent theEvent) {
+			//menuSelected(theEvent);
+
+		}
+	}
+
+	class ClearHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myClearButton.isEnabled()) {
+
+				myPaintPanel.clearShapes(); // clear stored info on panel
+
+				myClearButton.setEnabled(false);
+
+			}
+
+		}
+	}
+
+	class UndoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myUndoButton.isEnabled()) {
+				myPaintPanel.undo();
+			}
+		}
+	}
+
+	class RedoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (myRedoButton.isEnabled()) {
+
+				myPaintPanel.redo();
+			}
+		}
+	}
+
+	private class SliderAdjuster implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			JSlider source = (JSlider) e.getSource();
+			if (!source.getValueIsAdjusting()) {
+				int changeValue = (int) source.getValue();
+				myPaintPanel.setThickness(changeValue);
+			}
+		}
+	}
+
+	class PopOutAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// gets the image we want to use for our icon
+			final ImageIcon icon = myImageIcon;
+			// takes the image from the icon
+			Image imgIcon = icon.getImage();
+			// scales the image down
+			Image newImgIcon = imgIcon.getScaledInstance(50, 35,
+					java.awt.Image.SCALE_SMOOTH);
+			// takes our scaled image and makes it into an icon
+			final ImageIcon icon2 = new ImageIcon(newImgIcon);
+			// creates the pop up window when "about" is clicked with our custom
+			// title, message, and icon
+			JOptionPane.showMessageDialog(null,
+					"Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4",
+					"About", JOptionPane.INFORMATION_MESSAGE, icon2);
+		}
+	}
+
+	// listener for when exit is chosen
+	class ExitAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			myFrame.dispose();
+			System.exit(0);
+
+		}
+
+	}
 }

@@ -42,7 +42,7 @@ import javax.swing.event.MouseInputAdapter;
 import actions.PencilAction;
 import actions.LineAction;
 import actions.RectangleAction;
-import model.PaintPanelProperties;
+import model.UWColors;
 import actions.EllipseAction;
 import actions.EraserAction;
 
@@ -81,7 +81,7 @@ public class PowerPaintGUI {
 	 * Constructor of PowerPaintGUI
 	 * 
 	 */
-	public PowerPaintGUI() {
+	public PowerPaintGUI(){
 		// initialize panels, menu, toolbar, etc
 		setupGUI();
 
@@ -97,7 +97,6 @@ public class PowerPaintGUI {
 		myFrame.setIconImage(myImageIcon.getImage());
 
 		myPanel = new PaintPanel();
-		//myPanel.addPropertyChangeListener(myPaintMenuBar);
 		myFrame.add(myPanel);
 		
 		myDefaultAction = new LineAction(myPanel);
@@ -109,9 +108,12 @@ public class PowerPaintGUI {
 		
 
 		// put bars on the panel
+
 		myFrame.setJMenuBar(myPaintMenuBar.getMenuBar());
 		myFrame.add(myPaintToolBar.getPaintToolBar(), BorderLayout.SOUTH);
 
+		
+		
 		// finalize frame
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.pack();

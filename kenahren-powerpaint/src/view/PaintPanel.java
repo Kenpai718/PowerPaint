@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BasicStroke;
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -10,26 +9,17 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.basic.BasicDesktopIconUI.MouseInputHandler;
 
 import model.PaintShape;
-import model.PaintPanelProperties;
-import tools.AbstractPaintTool;
+import model.UWColors;
 import tools.EraserTool;
 import tools.LineTool;
 import tools.PaintTool;
-import tools.PencilTool;
 
 /**
  * 
@@ -38,9 +28,9 @@ import tools.PencilTool;
  * @version Fall 2020
  */
 
-public class PaintPanel extends JPanel implements PaintPanelProperties {
+public class PaintPanel extends JPanel implements UWColors {
 
-	// constants
+	// constant
 
 	/** The default size of the drawing panel. */
 	private static final Dimension PANEL_DEFAULT_SIZE = new Dimension(500, 300);
@@ -63,7 +53,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	private Shape myCurrentShape;
 
 	private Color myCurrentColor;
-	
+
 	/** Current primary color */
 	private Color myPrimaryColor;
 
@@ -88,8 +78,9 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	/** Boolean to inform paintpanel if it can draw with the current shape */
 	private boolean myDragStatus;
 
+	// TODO: UndoStatus currently not used in code so it is commented out
 	/** Boolean to inform paintpanel if undo was pressed */
-	private boolean myUndoStatus;
+	// private boolean myUndoStatus;
 
 	/** Boolean to inform paintpanel if redo was pressed */
 	private boolean myRedoStatus;
@@ -153,17 +144,17 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// send a property change to PowerPaintGUI
-		updateGUI();
+		updateStatus();
 
 		// draw all shapes currently on the list to the panel
-		if (!myShapesStack.isEmpty()) {
+		if (!myClearStatus) {
 			for (final PaintShape ps : myShapesStack) {
 				g2d.setStroke(new BasicStroke(ps.getThickness()));
 				g2d.setPaint(ps.getColor());
 				g2d.draw(ps.getShape());
 			}
 		}
-		
+
 		// draw a shape with the current tool only when the mouse is being
 		// dragged. This is to provide visual feedback as the user draws the
 		// shape.
@@ -171,6 +162,28 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 			g2d.setStroke(new BasicStroke(myThickness));
 			g2d.setPaint(myCurrentColor);
 			g2d.draw(myCurrentTool.getShape());
+		}
+
+	}
+
+	/**
+	 * When called this method fires property changes to the GUI class to update
+	 * various buttons such as clear, undo and redo.
+	 * 
+	 */
+	private void updateStatus() {
+
+		// update gui on the status of the panel if it has shapes drawn to it
+		if (!myShapesStack.isEmpty()) {
+			myClearStatus = false;
+		} else {
+			myClearStatus = true;
+		}
+
+		if (!myRedoStack.isEmpty()) {
+			myRedoStatus = true;
+		} else {
+			myRedoStatus = false;
 		}
 
 	}
@@ -217,6 +230,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * @param Shape shape to be saved
 	 */
 	public void saveShape(final Shape theShape) {
+
 		PaintShape ps = new PaintShape(theShape, myCurrentColor, myThickness);
 		myShapesStack.push(ps);
 	}
@@ -225,11 +239,10 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * Clear the shapes list and draw an empty panel
 	 */
 	public void clearShapes() {
-		
-		//make a backup of current shapes in case of undo
 
-		myShapesStack.clear();
+		// make a backup of current shapes in case user wants it back
 		myRedoStack.clear();
+		myShapesStack.clear();
 
 		repaint();
 	}
@@ -246,10 +259,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	}
 
 	/**
-	 * Undos a shape that was drawn
+	 * Redos a shape that was drawn
 	 */
 	public void redo() {
 		if (!myRedoStack.isEmpty()) {
+
 			PaintShape s = myRedoStack.pop();
 			myShapesStack.push(s);
 
@@ -260,40 +274,38 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	}
 
 	/**
-	 * When called this method fires property changes to the GUI class to update
-	 * various buttons such as clear, undo and redo.
+	 * Tells if the panel is empty or not
 	 * 
+	 * @return boolean true/false, where true = empty panel with no shapes
 	 */
-	private void updateGUI() {
+	public Boolean isEmptyPanel() {
+		return myClearStatus;
+	}
 
-		// update gui on the status of the panel if it has shapes drawn to it
-		firePropertyChange(PROPERTY_HAS_SHAPE, null,!myShapesStack.isEmpty());
-
-		// update gui on the status of the redo stack
-		firePropertyChange(PROPERTY_SHAPE_REDO, null, !myRedoStack.isEmpty());
-
+	/**
+	 * Tells if the panel can redo a shape
+	 * 
+	 * @return boolean true/false, true means can redo
+	 */
+	public Boolean canRedo() {
+		return myRedoStatus;
 	}
 
 	// inner class to track mouse input
 	class MouseHandler extends MouseInputAdapter {
-		
+
 		@Override
 		// set start point at mouse click
 		public void mousePressed(final MouseEvent theEvent) {
-			
+
 			if (myThickness > 0) {
-				if(myCurrentTool instanceof EraserTool)
-				{
+				if (myCurrentTool instanceof EraserTool) {
 					myCurrentColor = Color.white;
-				}
-				else
-				{
-					if (theEvent.getButton() == 1)
-					{
+				} else {
+					// left click
+					if (theEvent.getButton() == 1) {
 						myCurrentColor = myPrimaryColor;
-					}
-					else
-					{
+					} else { // right or any other click
 						myCurrentColor = mySecondaryColor;
 					}
 				}
@@ -334,7 +346,9 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 				saveShape(myCurrentShape);
 				myCurrentTool.reset();
+
 				repaint();
+
 			}
 		}
 
