@@ -256,6 +256,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		}
 
 	}
+	
 
 	/**
 	 * When called this method fires property changes to the GUI class to update

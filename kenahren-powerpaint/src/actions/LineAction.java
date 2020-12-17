@@ -14,6 +14,7 @@ import tools.LineTool;
 import tools.PaintTool;
 
 /**
+ * Sets up the line action for the button.
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
@@ -23,7 +24,9 @@ import tools.PaintTool;
 public class LineAction extends AbstractAction {
 	
 	//constants
+	/** Name for the button*/
 	public static final String NAME = "Line";
+	/** Icon for the button*/
     public static final ImageIcon ICON = new ImageIcon("./images/line_bw.gif");
     
     /** The JPanel to associate with this Action. */
@@ -52,12 +55,22 @@ public class LineAction extends AbstractAction {
 
     }
     
+    /**
+     * When clicking the button change to specified tool
+     * 
+     * @param ActionEvent clicking the button
+     */
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
     	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
     }
     
+    /**
+     * Get tool for this action
+     * 
+     * @return the tool used for this action
+     */
     public PaintTool getTool() {
     	return myTool;
     }

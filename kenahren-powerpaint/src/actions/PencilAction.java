@@ -14,6 +14,7 @@ import tools.PencilTool;
 import view.PaintPanel;
 
 /**
+ * Sets up the pencil action for a button
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
@@ -23,12 +24,15 @@ import view.PaintPanel;
 public class PencilAction extends AbstractAction{
 	
 	//constants
+	/** Name for the button*/
 	public static final String NAME = "Pencil";
+	/** Name for the button*/
     public static final ImageIcon ICON = new ImageIcon("./images/pencil_bw.gif");
     
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
+    /** The tool that represents the pencil. */
     private final PaintTool myTool;
 	
 	 /**
@@ -48,10 +52,24 @@ public class PencilAction extends AbstractAction{
        
     }
     
+    /**
+     * When clicking the button change to specified tool
+     * 
+     * @param ActionEvent clicking the button
+     */
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
     	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
+    }
+    
+    /**
+     * Get tool for this action
+     * 
+     * @return the tool used for this action
+     */
+    public PaintTool getTool() {
+    	return myTool;
     }
     
     @Override

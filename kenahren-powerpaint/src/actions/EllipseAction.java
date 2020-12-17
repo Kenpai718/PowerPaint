@@ -1,5 +1,14 @@
 package actions;
 
+/**
+ * Sets up the Ellipse action for a button.
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ *
+ */
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
@@ -22,13 +31,16 @@ import view.PaintPanel;
 public class EllipseAction extends AbstractAction {
 	
 	//constants
+	/** Name for the button*/
 	public static final String NAME = "Ellipse";
+	/** Icon for the button*/
     public static final ImageIcon ICON = new ImageIcon("./images/ellipse_bw.gif");
     
 	
     /** The JPanel to associate with this Action. */
     private final PaintPanel myPanel;
     
+    /**The tool that represents the ellipse.*/
     private PaintTool myTool;
     
    /**
@@ -49,10 +61,24 @@ public class EllipseAction extends AbstractAction {
 
     }
     
+    /**
+     * When clicking the button change to specified tool
+     * 
+     * @param ActionEvent clicking the button
+     */
     @Override
     public void actionPerformed(final ActionEvent theEvent) {
     	myPanel.setCurrentTool(myTool);
         myPanel.repaint();
+    }
+    
+    /**
+     * Get tool for this action
+     * 
+     * @return the tool used for this action
+     */
+    public PaintTool getTool() {
+    	return myTool;
     }
     
     @Override

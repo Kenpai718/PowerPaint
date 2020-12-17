@@ -1,13 +1,18 @@
 package view;
 
 import java.awt.Color;
-
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +77,9 @@ public class PaintMenuBar extends JMenuBar
 	/** A list of tool actions from actions package. */
 	private List<Action> myToolActions;
 
+	/** File menu option */
+	private JMenu myFileMenu;
+
 	/** Top file menu bar. */
 	private JMenu myOptionsMenu;
 
@@ -127,6 +135,7 @@ public class PaintMenuBar extends JMenuBar
 		myMenuBar = new JMenuBar();
 
 		// helper methods to condense code
+
 		setupMenuOptions();
 		setupMenuTools();
 		setupMenuHelp();

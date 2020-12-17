@@ -13,6 +13,7 @@ import view.PowerPaintGUI;
 
 
 /**
+ * Main program that runs the powerpaint program
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
@@ -22,14 +23,14 @@ import view.PowerPaintGUI;
 public class PowerPaintMain {
 
     /**
-     * Private constructor to prevent external instantiation.
+     * Private constructor to prevent instantiation.
      */
     private PowerPaintMain() {
         throw new IllegalStateException();
     }
 
     /**
-     * Creates and makes visible a ToolBarFrame.
+     * Runs the program and sets look and feel
      * 
      * @param theArgs Command line arguments, ignored.
      */

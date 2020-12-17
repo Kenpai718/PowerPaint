@@ -16,7 +16,7 @@ public class PaintShape {
 	private final int myThickness;
 
     /**
-     * Constructs that stores info about a PaintShape
+     * Constructor that stores info about a PaintShape
      * 
      * @param theShape the shape 
      * @param theColor color of the shape

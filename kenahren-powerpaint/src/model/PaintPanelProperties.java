@@ -16,6 +16,8 @@ import tools.LineTool;
  */
 
 public interface PaintPanelProperties {
+	
+	//properties
 
 	/**
 	 * Property for a change listener for when there is a shape on the panel.

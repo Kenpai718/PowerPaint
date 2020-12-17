@@ -13,6 +13,7 @@ import tools.PaintTool;
 import view.PaintPanel;
 
 /**
+ * Sets up the Eraser action for a button
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
@@ -22,12 +23,15 @@ import view.PaintPanel;
 public class EraserAction extends AbstractAction {
 
 	// constants
+	/** Name for the button*/
 	public static final String NAME = "Eraser";
+	/** Icon for the button*/
 	public static final ImageIcon ICON = new ImageIcon("./images/eraser_bw.gif");
 
 	/** The JPanel to associate with this Action. */
 	private final PaintPanel myPanel;
 
+	/**The tool associated with this action*/
 	private final PaintTool myTool;
 
 	/**
@@ -47,11 +51,25 @@ public class EraserAction extends AbstractAction {
 
 	}
 
+    /**
+     * When clicking the button change to specified tool
+     * 
+     * @param ActionEvent clicking the button
+     */
 	@Override
 	public void actionPerformed(final ActionEvent theEvent) {
 		myPanel.setCurrentTool(myTool);
 		myPanel.repaint();
 	}
+	
+    /**
+     * Get tool for this action
+     * 
+     * @return the tool used for this action
+     */
+    public PaintTool getTool() {
+    	return myTool;
+    }
 	
     @Override
     public String toString() {
