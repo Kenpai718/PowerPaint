@@ -25,17 +25,16 @@ import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import actions.EllipseAction;
 import actions.EraserAction;
 import actions.LineAction;
 import actions.PencilAction;
 import actions.RectangleAction;
-import model.UWColors;
+import model.PaintPanelProperties;
 
-public class PaintMenuBar extends JMenuBar implements UWColors {
+public class PaintMenuBar extends JMenuBar
+		implements PropertyChangeListener, PaintPanelProperties {
 
 	// constants
 
@@ -53,6 +52,9 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 
 	/** Slider initial value position. */
 	private static final int THICKNESS_INITIAL = 10;
+
+	private static final String ABOUT_MSG = "Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4";
+
 	/** Primary color icon */
 	private final ColorIcon myColorIcon;
 
@@ -112,8 +114,9 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 		myDefaultAction = theAction;
 		myToolActions = theToolActions;
 
-		setupMenu();
+		myPaintPanel.addPropertyChangeListener(this);
 
+		setupMenu();
 	}
 
 	public JMenuBar getMenuBar() {
@@ -160,7 +163,7 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 		myOptionsMenu.addSeparator();
 
 		// undo option: Shorcut ctrl + z
-		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Z);
+		myUndoButton = new JMenuItem("Undo", KeyEvent.VK_Y);
 		myUndoButton.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 		myUndoButton.setEnabled(false);
@@ -181,9 +184,6 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_E);
 		exit.addActionListener(new ExitAction());
 		myOptionsMenu.add(exit);
-
-		// enable/disable certain buttons depending on situation
-		myOptionsMenu.addMenuListener(new OptionsListener());
 
 	}
 
@@ -209,6 +209,47 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 		myPrimaryButton.addActionListener(new ColorChoicePrimary());
 		mySecondaryButton.addActionListener(new ColorChoiceSecondary());
 	}
+
+	/**
+	 * Setups the menu tools dropdown with radio buttons
+	 * 
+	 */
+	public void setupMenuTools() {
+		myToolsMenu = new JMenu("Tools");
+		myToolsMenu.setMnemonic(KeyEvent.VK_T);
+		myMenuBar.add(myToolsMenu);
+
+		// associate tool buttons with actions and add to toolbar
+		for (final Action act : myToolActions) {
+			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
+
+			myToolMenuButtons.add(rb);
+			myToolsMenu.add(rb);
+
+			// selects the line tool at the start as default
+			if (rb.getAction() == myDefaultAction) {
+				rb.setSelected(true);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Setups help menu
+	 * 
+	 */
+	public void setupMenuHelp() {
+		myHelpMenu = new JMenu("Help");
+		myHelpMenu.setMnemonic(KeyEvent.VK_H);
+		myMenuBar.add(myHelpMenu);
+
+		JMenuItem about = new JMenuItem("About...", KeyEvent.VK_A);
+		myHelpMenu.add(about);
+		about.addActionListener(new PopOutAction());
+	}
+
+	// inner classes/ event listeners
 
 	// class to open color swatch for primary color. After user chooses color,
 	// that color and icon is updated.
@@ -252,82 +293,6 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 
 	}
 
-	/**
-	 * Setups the menu tools dropdown with radio buttons
-	 * 
-	 */
-	public void setupMenuTools() {
-		myToolsMenu = new JMenu("Tools");
-		myToolsMenu.setMnemonic(KeyEvent.VK_T);
-		myMenuBar.add(myToolsMenu);
-
-		// associate tool buttons with actions and add to toolbar
-		for (final Action act : myToolActions) {
-			JRadioButtonMenuItem rb = new JRadioButtonMenuItem(act);
-
-			myToolMenuButtons.add(rb);
-			myToolsMenu.add(rb);
-
-			// selects the line tool at the start as default
-			if (rb.getAction() == myDefaultAction) {
-				rb.setSelected(true);
-			}
-
-		}
-
-	}
-
-	/**
-	 * Setups help menu
-	 * 
-	 */
-	public void setupMenuHelp() {
-		myHelpMenu = new JMenu("Help");
-		myHelpMenu.setMnemonic(KeyEvent.VK_H);
-		myMenuBar.add(myHelpMenu);
-
-		JMenuItem about = new JMenuItem("About...", KeyEvent.VK_A);
-		myHelpMenu.add(about);
-		about.addActionListener(new PopOutAction());
-	}
-
-	class OptionsListener implements MenuListener {
-
-		@Override
-		public void menuSelected(MenuEvent theEvent) {
-
-			// enable clear,undo, redo when the panel is not empty
-			if (myPaintPanel.isEmptyPanel()) {
-				myClearButton.setEnabled(false);
-				myUndoButton.setEnabled(false);
-				myRedoButton.setEnabled(false);
-			} else {
-				myClearButton.setEnabled(true);
-				myUndoButton.setEnabled(true);
-			}
-
-			// enable redo when there are shapes that were undone
-			if (myPaintPanel.canRedo()) {
-				myRedoButton.setEnabled(true);
-			} else {
-				myRedoButton.setEnabled(false);
-			}
-
-		}
-
-		@Override
-		public void menuDeselected(MenuEvent theEvent) {
-			//menuSelected(theEvent);
-
-		}
-
-		@Override
-		public void menuCanceled(MenuEvent theEvent) {
-			//menuSelected(theEvent);
-
-		}
-	}
-
 	class ClearHandler implements ActionListener {
 
 		@Override
@@ -336,11 +301,10 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 
 				myPaintPanel.clearShapes(); // clear stored info on panel
 
-				myClearButton.setEnabled(false);
-
 			}
 
 		}
+
 	}
 
 	class UndoAction implements ActionListener {
@@ -389,9 +353,8 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 			final ImageIcon icon2 = new ImageIcon(newImgIcon);
 			// creates the pop up window when "about" is clicked with our custom
 			// title, message, and icon
-			JOptionPane.showMessageDialog(null,
-					"Katlyn Malone and Kenneth Ahrens\nAutumn 2020 \nTCSS 305 Assignment 4",
-					"About", JOptionPane.INFORMATION_MESSAGE, icon2);
+			JOptionPane.showMessageDialog(null, ABOUT_MSG, "About",
+					JOptionPane.INFORMATION_MESSAGE, icon2);
 		}
 	}
 
@@ -403,6 +366,25 @@ public class PaintMenuBar extends JMenuBar implements UWColors {
 			myFrame.dispose();
 			System.exit(0);
 
+		}
+
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent theEvent) {
+
+		// make sure the value is a boolean in case there are other properties
+		if (theEvent.getNewValue() instanceof Boolean) {
+			Boolean status = (boolean) theEvent.getNewValue();
+
+			if (PROPERTY_HAS_SHAPE.equals(theEvent.getPropertyName())) {
+				myClearButton.setEnabled(status);
+				myUndoButton.setEnabled(status);
+			}
+
+			if (PROPERTY_SHAPE_REDO.equals(theEvent.getPropertyName())) {
+				myRedoButton.setEnabled(status);
+			}
 		}
 
 	}

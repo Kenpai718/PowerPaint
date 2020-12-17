@@ -63,8 +63,10 @@ public class PaintShape {
 		return myThickness;
 	}
 
+
 	@Override
 	public String toString() {
+		//for info on the paintshape and debugging
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("Shape:" + myShape.toString() + ", ");
