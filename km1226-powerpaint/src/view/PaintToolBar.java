@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+<<<<<<< Updated upstream
 import actions.EllipseAction;
 import actions.EraserAction;
 import actions.LineAction;
@@ -19,6 +20,19 @@ public class PaintToolBar extends JToolBar
 {
 	private final PaintPanel myPaintPanel;
 	
+=======
+/**
+ * 
+ * Sets up the bottom tool bar in the GUI
+ * 
+ * @author Kenneth Ahrens
+ * @author Katlyn Malone
+ * @version Fall 2020
+ */
+
+public class PaintToolBar extends JToolBar {
+
+>>>>>>> Stashed changes
 	/** A button group for tool actions in toolbar */
 	private ButtonGroup myToolBarButtons;
 
@@ -31,6 +45,7 @@ public class PaintToolBar extends JToolBar
 	/** Sets default tool action */
 	private Action myDefaultAction;
 	
+<<<<<<< Updated upstream
 	public PaintToolBar(JFrame theFrame, PaintPanel thePanel)
 	{
 		super();
@@ -48,6 +63,33 @@ public class PaintToolBar extends JToolBar
 		myToolActions.add(new EraserAction(myPaintPanel));
 	}
 	
+=======
+	/**
+	 * PaintToolBar constructor
+	 * 
+	 * @param theFrame               is the frame the menu bar is attached to
+	 * @param thePanel               is the drawing panel
+	 * @param theToolActions         is the list of tool actions to assign to buttons
+	 * @param theAction              is the action used for the default action
+	 */
+	public PaintToolBar(JFrame theFrame, PaintPanel thePanel,
+			ArrayList<Action> theToolActions, Action theAction) {
+		super();
+		myToolBar = new JToolBar();
+		myToolBarButtons = new ButtonGroup();
+		myToolActions = theToolActions;
+
+		// initialize tool actions for buttons
+		myDefaultAction = theAction;
+
+		setupToolBarActions();
+	}
+	
+	/**
+	 * Creates each Tool Action as a JToggleButton 
+	 * and adds it to the tool bar
+	 */
+>>>>>>> Stashed changes
 	public void setupToolBarActions() {
 
 		// associate tool buttons with actions and add to toolbar
@@ -64,4 +106,16 @@ public class PaintToolBar extends JToolBar
 		}
 
 	}
+<<<<<<< Updated upstream
+=======
+	
+	/**
+	 *Getter for the toolbar
+	 * 
+	 * @return JToolBar the finished toolbar
+	 */
+	public JToolBar getPaintToolBar() {
+		return myToolBar;
+	}
+>>>>>>> Stashed changes
 }

@@ -1,5 +1,6 @@
 package controller;
 
+<<<<<<< Updated upstream
 import javax.swing.JFrame;
 import java.awt.EventQueue;
 import javax.swing.JMenu;
@@ -9,10 +10,20 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import view.PaintPanel;
+=======
+import java.awt.EventQueue;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+>>>>>>> Stashed changes
 import view.PowerPaintGUI;
 
 
 /**
+<<<<<<< Updated upstream
+=======
+ * Main program that runs the powerpaint program
+>>>>>>> Stashed changes
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
@@ -22,14 +33,22 @@ import view.PowerPaintGUI;
 public class PowerPaintMain {
 
     /**
+<<<<<<< Updated upstream
      * Private constructor to prevent external instantiation.
+=======
+     * Private constructor to prevent instantiation.
+>>>>>>> Stashed changes
      */
     private PowerPaintMain() {
         throw new IllegalStateException();
     }
 
     /**
+<<<<<<< Updated upstream
      * Creates and makes visible a ToolBarFrame.
+=======
+     * Runs the program and sets look and feel
+>>>>>>> Stashed changes
      * 
      * @param theArgs Command line arguments, ignored.
      */

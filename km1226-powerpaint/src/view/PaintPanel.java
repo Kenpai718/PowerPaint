@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+<<<<<<< Updated upstream
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,10 +18,15 @@ import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+=======
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
+>>>>>>> Stashed changes
 import java.util.Stack;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
+<<<<<<< Updated upstream
 import javax.swing.plaf.basic.BasicDesktopIconUI.MouseInputHandler;
 
 import model.PaintShape;
@@ -32,25 +38,52 @@ import tools.PaintTool;
 import tools.PencilTool;
 
 /**
+=======
+
+import model.PaintShape;
+import model.PaintPanelProperties;
+import tools.EraserTool;
+import tools.LineTool;
+import tools.PaintTool;
+
+/**
+ * Used to create the actual panel we paint on in the program
+ * and what the shapes are drawn into
+>>>>>>> Stashed changes
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
  * @version Fall 2020
  */
 
+<<<<<<< Updated upstream
 public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	// constants
 
+=======
+public class PaintPanel extends JPanel implements PaintPanelProperties, Serializable{
+
+	// constants
+
+	/**
+	 * Java auto generated serial constant
+	 */
+	private static final long serialVersionUID = 9190391605769957067L;
+
+>>>>>>> Stashed changes
 	/** The default size of the drawing panel. */
 	private static final Dimension PANEL_DEFAULT_SIZE = new Dimension(500, 300);
 
 	/** The initial thickness size. */
 	private static final int DEFAULT_THICKNESS = 10;
 
+<<<<<<< Updated upstream
 	/** The initial point of the tool. */
 	private static final Point INITIAL_POINT = new Point(0, 0);
 
+=======
+>>>>>>> Stashed changes
 	// fields
 
 	/** Stack to keep track of all shapes drawn on the panel */
@@ -61,7 +94,12 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 
 	/** Current shape on panel */
 	private Shape myCurrentShape;
+<<<<<<< Updated upstream
 
+=======
+	
+	/** The current color being used for drawing */
+>>>>>>> Stashed changes
 	private Color myCurrentColor;
 	
 	/** Current primary color */
@@ -82,6 +120,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	/** Next/End position */
 	private Point myNextPoint;
 
+<<<<<<< Updated upstream
 	/** When true clear the panel */
 	private boolean myClearStatus;
 
@@ -94,6 +133,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	/** Boolean to inform paintpanel if redo was pressed */
 	private boolean myRedoStatus;
 
+=======
+	/** Boolean to inform paintpanel if it can draw with the current shape */
+	private boolean myDragStatus;
+
+>>>>>>> Stashed changes
 	/**
 	 * Paint panel constructor
 	 */
@@ -104,7 +148,10 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		myPrimaryColor = DEFAULT_PRIMARY;
 		mySecondaryColor = DEFAULT_SECONDARY;
 		myThickness = DEFAULT_THICKNESS;
+<<<<<<< Updated upstream
 		myClearStatus = false;
+=======
+>>>>>>> Stashed changes
 		myDragStatus = false;
 		myShapesStack = new Stack<PaintShape>();
 		myRedoStack = new Stack<PaintShape>();
@@ -146,7 +193,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * 
 	 * @param theGraphics graphics
 	 */
+<<<<<<< Updated upstream
 	public void paintComponent(Graphics theGraphics) {
+=======
+	public void paintComponent(final Graphics theGraphics) {
+>>>>>>> Stashed changes
 		super.paintComponent(theGraphics);
 		final Graphics2D g2d = (Graphics2D) theGraphics;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -155,6 +206,7 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 		// send a property change to PowerPaintGUI
 		updateGUI();
 
+<<<<<<< Updated upstream
 		// draw a shape with the current tool only when the mouse is being
 		// dragged. This is to provide visual feedback as the user draws the
 		// shape.
@@ -164,6 +216,8 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 			g2d.draw(myCurrentTool.getShape());
 		}
 
+=======
+>>>>>>> Stashed changes
 		// draw all shapes currently on the list to the panel
 		if (!myShapesStack.isEmpty()) {
 			for (final PaintShape ps : myShapesStack) {
@@ -172,6 +226,18 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 				g2d.draw(ps.getShape());
 			}
 		}
+<<<<<<< Updated upstream
+=======
+		
+		// draw a shape with the current tool only when the mouse is being
+		// dragged. This is to provide visual feedback as the user draws the
+		// shape.
+		if (myDragStatus) {
+			g2d.setStroke(new BasicStroke(myThickness));
+			g2d.setPaint(myCurrentColor);
+			g2d.draw(myCurrentTool.getShape());
+		}
+>>>>>>> Stashed changes
 
 	}
 
@@ -180,7 +246,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * 
 	 * @param Color the color to change to
 	 */
+<<<<<<< Updated upstream
 	public void setColor(Color theColor) {
+=======
+	public void setColor(final Color theColor) {
+>>>>>>> Stashed changes
 		myPrimaryColor = theColor;
 	}
 
@@ -189,7 +259,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * 
 	 * @param Color the color to change to
 	 */
+<<<<<<< Updated upstream
 	public void setSecondaryColor(Color theColor) {
+=======
+	public void setSecondaryColor(final Color theColor) {
+>>>>>>> Stashed changes
 		mySecondaryColor = theColor;
 	}
 
@@ -198,7 +272,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * 
 	 * @param int of the thickness value
 	 */
+<<<<<<< Updated upstream
 	public void setThickness(int theThickness) {
+=======
+	public void setThickness(final int theThickness) {
+>>>>>>> Stashed changes
 		myThickness = theThickness;
 	}
 
@@ -207,7 +285,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 * 
 	 * @param PaintTool the type of tool used
 	 */
+<<<<<<< Updated upstream
 	public void setCurrentTool(PaintTool theTool) {
+=======
+	public void setCurrentTool(final PaintTool theTool) {
+>>>>>>> Stashed changes
 		myCurrentTool = theTool;
 	}
 
@@ -226,8 +308,11 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	 */
 	public void clearShapes() {
 		
+<<<<<<< Updated upstream
 		//make a backup of current shapes in case of undo
 
+=======
+>>>>>>> Stashed changes
 		myShapesStack.clear();
 		myRedoStack.clear();
 
@@ -246,18 +331,57 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	}
 
 	/**
+<<<<<<< Updated upstream
 	 * Undos a shape that was drawn
+=======
+	 * Redos a shape that was undone
+>>>>>>> Stashed changes
 	 */
 	public void redo() {
 		if (!myRedoStack.isEmpty()) {
 			PaintShape s = myRedoStack.pop();
 			myShapesStack.push(s);
+<<<<<<< Updated upstream
 
 		}
 
 		repaint();
 
 	}
+=======
+			
+			repaint();
+
+		}
+
+	}
+	
+	/**
+	 * Returns all shapes currently drawn
+	 * 
+	 * @return Shape stack of all currently drawn shapes
+	 */
+	public Stack<PaintShape> getShapesList() {
+		Stack<PaintShape> copy = (Stack<PaintShape>) myShapesStack.clone();
+		return copy;
+		
+	}
+	
+	/**
+	 * Clears panel and redraws shapes with a new stack of shapes
+	 * 
+	 * @param Shape shapes to be loaded to panel
+	 */
+	public void loadShapes(final Stack<PaintShape> theShapes) {
+		clearShapes();
+		myShapesStack.addAll(theShapes);
+		
+		//draw new shapes
+		repaint();
+		
+	}
+	
+>>>>>>> Stashed changes
 
 	/**
 	 * When called this method fires property changes to the GUI class to update
@@ -267,8 +391,12 @@ public class PaintPanel extends JPanel implements PaintPanelProperties {
 	private void updateGUI() {
 
 		// update gui on the status of the panel if it has shapes drawn to it
+<<<<<<< Updated upstream
 		firePropertyChange(PROPERTY_HAS_SHAPE, null,
 				!myShapesStack.isEmpty());
+=======
+		firePropertyChange(PROPERTY_HAS_SHAPE, null,!myShapesStack.isEmpty());
+>>>>>>> Stashed changes
 
 		// update gui on the status of the redo stack
 		firePropertyChange(PROPERTY_SHAPE_REDO, null, !myRedoStack.isEmpty());

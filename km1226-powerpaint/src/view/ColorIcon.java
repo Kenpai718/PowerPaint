@@ -7,13 +7,21 @@ import java.awt.Graphics;
 import javax.swing.Icon;
 
 /**
+<<<<<<< Updated upstream
+=======
+ * Used to create the custom color icons used in the Options menu
+>>>>>>> Stashed changes
  * 
  * @author Kenneth Ahrens
  * @author Katlyn Malone
  * @version Fall 2020
  */
 
+<<<<<<< Updated upstream
 public class ColorIcon implements Icon {
+=======
+public class ColorIcon implements Icon{
+>>>>>>> Stashed changes
 	
     /** The color of the icon. */
     private Color myColor;
@@ -35,6 +43,10 @@ public class ColorIcon implements Icon {
     }
     
     @Override
+<<<<<<< Updated upstream
+=======
+    // creates the custom icon with the color input
+>>>>>>> Stashed changes
     public void paintIcon(final Component theComponent, 
                           final Graphics theGraphics, final int theX, final int theY) {
         

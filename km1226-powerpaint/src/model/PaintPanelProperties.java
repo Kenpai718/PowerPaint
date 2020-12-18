@@ -14,12 +14,21 @@ import java.awt.Color;
  */
 
 public interface PaintPanelProperties {
+<<<<<<< Updated upstream
+=======
+	
+	//properties
+>>>>>>> Stashed changes
 
 	/**
 	 * Property for a change listener for when there is a shape on the panel.
 	 * Tell GUI to reenable or disable the clear/undo button.
 	 */
+<<<<<<< Updated upstream
 	final String PROPERTY_HAS_SHAPE = "There is shape(s) on PaintPanel";
+=======
+	final String PROPERTY_HAS_SHAPE = "There is shape(s) on PaintPanel.";
+>>>>>>> Stashed changes
 	
 	/**
 	 * Property to tell GUI an undone shape has been readded.
